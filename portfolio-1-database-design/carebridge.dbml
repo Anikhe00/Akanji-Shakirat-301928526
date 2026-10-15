@@ -1,0 +1,97 @@
+Table branches {
+  branch_id int [pk, increment]
+  name varchar [not null, unique]
+  city varchar [not null]
+  address varchar
+  phone varchar
+}
+
+Table departments {
+  department_id int [pk, increment]
+  name varchar [not null, unique]
+}
+
+Table doctors {
+  doctor_id int [pk, increment]
+  branch_id int [not null, ref: > branches.branch_id]
+  department_id int [not null, ref: > departments.department_id]
+  full_name varchar [not null]
+  licence_number varchar [not null, unique]
+  email varchar [unique]
+  phone varchar
+}
+
+Table patients {
+  patient_id int [pk, increment]
+  first_name varchar [not null]
+  last_name varchar [not null]
+  date_of_birth date [not null]
+  sex varchar [not null]
+  phone varchar
+  email varchar
+  address varchar
+  registered_at timestamp [not null]
+}
+
+Table appointments {
+  appointment_id int [pk, increment]
+  patient_id int [not null, ref: > patients.patient_id]
+  doctor_id int [not null, ref: > doctors.doctor_id]
+  scheduled_start timestamp [not null]
+  scheduled_end timestamp [not null]
+  status varchar [not null, note: 'scheduled, completed, cancelled, no_show']
+  reason varchar
+
+  indexes {
+    (doctor_id, scheduled_start) [unique]
+  }
+}
+
+Table visits {
+  visit_id int [pk, increment]
+  appointment_id int [not null, unique, ref: - appointments.appointment_id]
+  visit_date timestamp [not null]
+  notes text
+}
+
+Table diagnoses {
+  diagnosis_id int [pk, increment]
+  visit_id int [not null, ref: > visits.visit_id]
+  condition_name varchar [not null]
+  icd_code varchar
+}
+
+Table drugs {
+  drug_id int [pk, increment]
+  name varchar [not null, unique]
+  strength varchar
+  unit_price numeric [not null]
+  stock_quantity int [not null]
+}
+
+Table prescriptions {
+  prescription_id int [pk, increment]
+  visit_id int [not null, ref: > visits.visit_id]
+  drug_id int [not null, ref: > drugs.drug_id]
+  dosage varchar [not null]
+  duration_days int [not null]
+  quantity int [not null]
+  dispensed_at timestamp
+}
+
+Table lab_orders {
+  lab_order_id int [pk, increment]
+  visit_id int [not null, ref: > visits.visit_id]
+  test_name varchar [not null]
+  ordered_at timestamp [not null]
+  result_text text
+  resulted_at timestamp
+}
+
+Table payments {
+  payment_id int [pk, increment]
+  visit_id int [not null, ref: > visits.visit_id]
+  amount numeric [not null]
+  method varchar [not null]
+  paid_at timestamp [not null]
+}
