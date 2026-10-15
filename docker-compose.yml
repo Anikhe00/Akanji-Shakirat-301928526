@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: carebridge-pg
+    environment:
+      POSTGRES_USER: carebridge
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: carebridge
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  mongo:
+    image: mongo:7
+    container_name: carebridge-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+volumes:
+  pgdata:
+  mongodata:
