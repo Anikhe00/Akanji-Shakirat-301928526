@@ -1,0 +1,181 @@
+=== Q1 patient history
+ appointment_id |    scheduled_start     |  status   |       doctor        |       condition_name        
+----------------+------------------------+-----------+---------------------+-----------------------------
+          91046 | 2026-01-20 09:00:00+00 | completed | Dr Hauwa Adeyemi    | Skin infection
+          87596 | 2026-01-05 14:00:00+00 | completed | Dr Hauwa Adeyemi    | Urinary tract infection
+          85449 | 2025-12-28 07:00:00+00 | completed | Dr Yusuf Okafor     | Urinary tract infection
+          83267 | 2025-12-18 14:00:00+00 | completed | Dr Segun Balogun    | Gastroenteritis
+          79880 | 2025-12-04 13:00:00+00 | completed | Dr Adaeze Adeyemi   | Gastroenteritis
+          79809 | 2025-12-04 11:00:00+00 | completed | Dr Yusuf Okafor     | Urinary tract infection
+          79692 | 2025-12-04 07:00:00+00 | completed | Dr Ngozi Balogun    | Gastroenteritis
+          73146 | 2025-11-06 13:00:00+00 | completed | Dr Hauwa Okafor     | Upper respiratory infection
+          70605 | 2025-10-27 08:00:00+00 | completed | Dr Emeka Balogun    | Malaria
+          70581 | 2025-10-27 07:00:00+00 | completed | Dr Tunde Adeyemi    | Asthma
+          65312 | 2025-10-05 08:00:00+00 | cancelled | Dr Ngozi Okafor     | 
+          62266 | 2025-09-22 10:00:00+00 | completed | Dr Hauwa Balogun    | Typhoid fever
+          62266 | 2025-09-22 10:00:00+00 | completed | Dr Hauwa Balogun    | Typhoid fever
+          61990 | 2025-09-21 09:00:00+00 | cancelled | Dr Adaeze Balogun   | 
+          56818 | 2025-08-30 12:00:00+00 | cancelled | Dr Blessing Adeyemi | 
+          56200 | 2025-08-28 08:00:00+00 | completed | Dr Adaeze Balogun   | Asthma
+          53555 | 2025-08-17 08:00:00+00 | completed | Dr Emeka Okafor     | Skin infection
+          51648 | 2025-08-09 08:00:00+00 | no_show   | Dr Blessing Balogun | 
+          49954 | 2025-08-02 08:00:00+00 | completed | Dr Funmi Okafor     | Typhoid fever
+          48330 | 2025-07-26 09:00:00+00 | completed | Dr Adaeze Bello     | Upper respiratory infection
+          46697 | 2025-07-19 11:00:00+00 | completed | Dr Segun Balogun    | Type 2 diabetes
+          46697 | 2025-07-19 11:00:00+00 | completed | Dr Segun Balogun    | Asthma
+          44774 | 2025-07-11 11:00:00+00 | completed | Dr Funmi Balogun    | Urinary tract infection
+          44774 | 2025-07-11 11:00:00+00 | completed | Dr Funmi Balogun    | Upper respiratory infection
+          44275 | 2025-07-09 10:00:00+00 | completed | Dr Emeka Adeyemi    | Asthma
+          43128 | 2025-07-04 12:00:00+00 | cancelled | Dr Blessing Balogun | 
+          42606 | 2025-07-02 11:00:00+00 | completed | Dr Hauwa Okafor     | Malaria
+          42395 | 2025-07-01 12:00:00+00 | completed | Dr Emeka Okafor     | Type 2 diabetes
+          41272 | 2025-06-26 14:00:00+00 | completed | Dr Ngozi Adeyemi    | Upper respiratory infection
+          40462 | 2025-06-23 11:00:00+00 | completed | Dr Ngozi Adeyemi    | Type 2 diabetes
+          35109 | 2025-06-01 09:00:00+00 | completed | Dr Yusuf Okafor     | Anaemia
+          24219 | 2025-04-16 14:00:00+00 | no_show   | Dr Yusuf Okafor     | 
+          24124 | 2025-04-16 11:00:00+00 | no_show   | Dr Funmi Okafor     | 
+          23951 | 2025-04-15 13:00:00+00 | no_show   | Dr Tunde Balogun    | 
+          21624 | 2025-04-06 07:00:00+00 | completed | Dr Funmi Adeyemi    | Upper respiratory infection
+          21624 | 2025-04-06 07:00:00+00 | completed | Dr Funmi Adeyemi    | Malaria
+          19941 | 2025-03-30 07:00:00+00 | completed | Dr Tunde Adeyemi    | Asthma
+          19941 | 2025-03-30 07:00:00+00 | completed | Dr Tunde Adeyemi    | Upper respiratory infection
+          16876 | 2025-03-17 09:00:00+00 | cancelled | Dr Hauwa Balogun    | 
+          13671 | 2025-03-03 14:00:00+00 | completed | Dr Tunde Adeyemi    | Urinary tract infection
+          12668 | 2025-02-27 13:00:00+00 | completed | Dr Blessing Okafor  | Malaria
+           3987 | 2025-01-22 11:00:00+00 | completed | Dr Segun Adeyemi    | Skin infection
+           3608 | 2025-01-21 07:00:00+00 | completed | Dr Blessing Okafor  | Anaemia
+             68 | 2025-01-06 09:00:00+00 | completed | Dr Blessing Okafor  | Anaemia
+(44 rows)
+
+=== Q2 doctor workload per branch, June 2025
+          branch           |      full_name      | completed 
+---------------------------+---------------------+-----------
+ CareBridge Ogbomoso       | Dr Emeka Adeyemi    |       203
+ CareBridge Ogbomoso       | Dr Funmi Okafor     |       201
+ CareBridge Ogbomoso       | Dr Blessing Adeyemi |       198
+ CareBridge Ibadan Central | Dr Hauwa Okafor     |       198
+ CareBridge Ibadan Central | Dr Ibrahim Okafor   |       198
+ CareBridge Ibadan Central | Dr Emeka Balogun    |       197
+ CareBridge Oyo Town       | Dr Blessing Okafor  |       197
+ CareBridge Oyo Town       | Dr Segun Balogun    |       197
+ CareBridge Ibadan Central | Dr Segun Adeyemi    |       197
+ CareBridge Oyo Town       | Dr Ngozi Okafor     |       196
+(10 rows)
+
+=== Q3 ten most prescribed drugs
+          name           | times_prescribed | total_quantity 
+-------------------------+------------------+----------------
+ Amlodipine              |             3848 |          79247
+ Prednisolone            |             3837 |          78508
+ Metformin               |             3831 |          79040
+ Azithromycin            |             3824 |          78608
+ Co-trimoxazole          |             3813 |          78439
+ Paracetamol             |             3809 |          77987
+ Ibuprofen               |             3802 |          77891
+ Lisinopril              |             3786 |          77466
+ Folic acid              |             3782 |          77306
+ Artemether/Lumefantrine |             3774 |          78643
+(10 rows)
+
+=== Q4 everything one patient was prescribed
+    scheduled_start     |          drug          |           dosage            | quantity 
+------------------------+------------------------+-----------------------------+----------
+ 2026-01-20 09:00:00+00 | Atorvastatin           | 5ml twice daily             |       16
+ 2026-01-20 09:00:00+00 | Fluconazole            | 1 tablet at night           |       11
+ 2026-01-05 14:00:00+00 | Amoxicillin            | 5ml twice daily             |        8
+ 2025-12-28 07:00:00+00 | Diclofenac             | 2 tablets three times daily |       24
+ 2025-12-18 14:00:00+00 | Vitamin C              | 2 tablets three times daily |       16
+ 2025-12-18 14:00:00+00 | Ibuprofen              | 2 tablets three times daily |       20
+ 2025-12-04 13:00:00+00 | Folic acid             | 2 tablets three times daily |       23
+ 2025-12-04 13:00:00+00 | Paracetamol            | 1 tablet at night           |       29
+ 2025-12-04 11:00:00+00 | Loratadine             | 5ml twice daily             |       30
+ 2025-12-04 07:00:00+00 | Cetirizine             | 1 tablet twice daily        |       24
+ 2025-11-06 13:00:00+00 | Folic acid             | 2 tablets three times daily |       13
+ 2025-11-06 13:00:00+00 | Oral rehydration salts | 5ml twice daily             |       27
+ 2025-10-27 08:00:00+00 | Zinc sulphate          | 1 tablet twice daily        |        6
+ 2025-10-27 07:00:00+00 | Folic acid             | 2 tablets three times daily |       17
+ 2025-09-22 10:00:00+00 | Vitamin C              | 5ml twice daily             |        7
+ 2025-08-28 08:00:00+00 | Fluconazole            | 1 tablet twice daily        |       28
+ 2025-08-28 08:00:00+00 | Ciprofloxacin          | 1 tablet at night           |       34
+ 2025-08-17 08:00:00+00 | Vitamin C              | 1 tablet twice daily        |       31
+ 2025-08-02 08:00:00+00 | Fluconazole            | 1 tablet at night           |       25
+ 2025-08-02 08:00:00+00 | Zinc sulphate          | 1 tablet twice daily        |       28
+ 2025-07-19 11:00:00+00 | Atorvastatin           | 5ml twice daily             |       13
+ 2025-07-11 11:00:00+00 | Lisinopril             | 1 tablet at night           |       26
+ 2025-07-09 10:00:00+00 | Ferrous sulphate       | 5ml twice daily             |        7
+ 2025-07-02 11:00:00+00 | Ibuprofen              | 2 tablets three times daily |       24
+ 2025-06-26 14:00:00+00 | Cetirizine             | 1 tablet at night           |       17
+ 2025-06-23 11:00:00+00 | Paracetamol            | 1 tablet at night           |        6
+ 2025-06-23 11:00:00+00 | Hydrochlorothiazide    | 2 tablets three times daily |       12
+ 2025-06-01 09:00:00+00 | Zinc sulphate          | 1 tablet at night           |       18
+ 2025-06-01 09:00:00+00 | Vitamin C              | 1 tablet at night           |       15
+ 2025-04-06 07:00:00+00 | Ferrous sulphate       | 1 tablet twice daily        |       28
+ 2025-03-30 07:00:00+00 | Vitamin C              | 1 tablet at night           |        9
+ 2025-03-03 14:00:00+00 | Prednisolone           | 2 tablets three times daily |       10
+ 2025-03-03 14:00:00+00 | Hydrochlorothiazide    | 1 tablet twice daily        |        7
+ 2025-01-22 11:00:00+00 | Ferrous sulphate       | 1 tablet twice daily        |       35
+ 2025-01-21 07:00:00+00 | Oral rehydration salts | 1 tablet at night           |        7
+ 2025-01-06 09:00:00+00 | Amlodipine             | 2 tablets three times daily |       11
+(36 rows)
+
+=== Q5 one doctor, one week
+ appointment_id | patient_id |    scheduled_start     |  status   
+----------------+------------+------------------------+-----------
+          35287 |      14551 | 2025-06-02 07:00:00+00 | completed
+          35317 |      16437 | 2025-06-02 08:00:00+00 | completed
+          35347 |         56 | 2025-06-02 09:00:00+00 | completed
+          35377 |       5708 | 2025-06-02 10:00:00+00 | no_show
+          35407 |       8723 | 2025-06-02 11:00:00+00 | completed
+          35437 |      18962 | 2025-06-02 12:00:00+00 | completed
+          35467 |       8482 | 2025-06-02 13:00:00+00 | no_show
+          35497 |       2954 | 2025-06-02 14:00:00+00 | completed
+          35527 |         42 | 2025-06-03 07:00:00+00 | completed
+          35557 |        835 | 2025-06-03 08:00:00+00 | completed
+          35587 |       8879 | 2025-06-03 09:00:00+00 | completed
+          35617 |       2841 | 2025-06-03 10:00:00+00 | completed
+          35647 |       2402 | 2025-06-03 11:00:00+00 | completed
+          35677 |      16600 | 2025-06-03 12:00:00+00 | completed
+          35707 |      13056 | 2025-06-03 13:00:00+00 | completed
+          35737 |        511 | 2025-06-03 14:00:00+00 | completed
+          35767 |       1655 | 2025-06-04 07:00:00+00 | completed
+          35797 |       6329 | 2025-06-04 08:00:00+00 | completed
+          35827 |       1229 | 2025-06-04 09:00:00+00 | completed
+          35857 |       9993 | 2025-06-04 10:00:00+00 | completed
+          35887 |       7950 | 2025-06-04 11:00:00+00 | completed
+          35917 |      14667 | 2025-06-04 12:00:00+00 | no_show
+          35947 |       7236 | 2025-06-04 13:00:00+00 | completed
+          35977 |          1 | 2025-06-04 14:00:00+00 | completed
+          36007 |      13046 | 2025-06-05 07:00:00+00 | completed
+          36037 |       1975 | 2025-06-05 08:00:00+00 | completed
+          36067 |       5786 | 2025-06-05 09:00:00+00 | completed
+          36097 |        738 | 2025-06-05 10:00:00+00 | completed
+          36127 |        427 | 2025-06-05 11:00:00+00 | completed
+          36157 |      17290 | 2025-06-05 12:00:00+00 | completed
+          36187 |       1602 | 2025-06-05 13:00:00+00 | cancelled
+          36217 |       6034 | 2025-06-05 14:00:00+00 | completed
+          36247 |       1265 | 2025-06-06 07:00:00+00 | no_show
+          36277 |        151 | 2025-06-06 08:00:00+00 | completed
+          36307 |       1311 | 2025-06-06 09:00:00+00 | completed
+          36337 |         13 | 2025-06-06 10:00:00+00 | completed
+          36367 |        225 | 2025-06-06 11:00:00+00 | completed
+          36397 |       1564 | 2025-06-06 12:00:00+00 | completed
+          36427 |        341 | 2025-06-06 13:00:00+00 | no_show
+          36457 |       3640 | 2025-06-06 14:00:00+00 | completed
+          36487 |       9682 | 2025-06-07 07:00:00+00 | completed
+          36517 |      14249 | 2025-06-07 08:00:00+00 | completed
+          36547 |       9976 | 2025-06-07 09:00:00+00 | completed
+          36577 |          6 | 2025-06-07 10:00:00+00 | completed
+          36607 |      12360 | 2025-06-07 11:00:00+00 | completed
+          36637 |       5313 | 2025-06-07 12:00:00+00 | completed
+          36667 |      13843 | 2025-06-07 13:00:00+00 | completed
+          36697 |       1545 | 2025-06-07 14:00:00+00 | completed
+          36727 |       7682 | 2025-06-08 07:00:00+00 | completed
+          36757 |      19427 | 2025-06-08 08:00:00+00 | completed
+          36787 |       6084 | 2025-06-08 09:00:00+00 | cancelled
+          36817 |       2352 | 2025-06-08 10:00:00+00 | completed
+          36847 |      11280 | 2025-06-08 11:00:00+00 | no_show
+          36877 |      16048 | 2025-06-08 12:00:00+00 | completed
+          36907 |      14321 | 2025-06-08 13:00:00+00 | completed
+          36937 |       3283 | 2025-06-08 14:00:00+00 | completed
+(56 rows)
+
