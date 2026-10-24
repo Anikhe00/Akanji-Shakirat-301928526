@@ -1,0 +1,9 @@
+                                                          List of relations
+ Schema |               Name               | Type  |   Owner    |     Table     | Persistence | Access method |  Size   | Description 
+--------+----------------------------------+-------+------------+---------------+-------------+---------------+---------+-------------
+ public | idx_appointments_completed_start | index | carebridge | appointments  | permanent   | btree         | 624 kB  | 
+ public | idx_appointments_patient_start   | index | carebridge | appointments  | permanent   | btree         | 3096 kB | 
+ public | idx_diagnoses_visit              | index | carebridge | diagnoses     | permanent   | btree         | 2040 kB | 
+ public | idx_prescriptions_visit          | index | carebridge | prescriptions | permanent   | btree         | 1928 kB | 
+(4 rows)
+

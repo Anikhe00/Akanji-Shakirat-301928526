@@ -1,0 +1,115 @@
+=== Q1 patient history
+                                                                           QUERY PLAN                                                                            
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=551.41..551.55 rows=56 width=52) (actual time=0.389..0.392 rows=44 loops=1)
+   Sort Key: a.scheduled_start DESC
+   Sort Method: quicksort  Memory: 28kB
+   ->  Nested Loop Left Join  (cost=7.04..549.78 rows=56 width=52) (actual time=0.041..0.370 rows=44 loops=1)
+         ->  Nested Loop Left Join  (cost=6.75..532.48 rows=47 width=42) (actual time=0.035..0.247 rows=39 loops=1)
+               ->  Hash Join  (cost=6.46..161.91 rows=47 width=38) (actual time=0.030..0.112 rows=39 loops=1)
+                     Hash Cond: (a.doctor_id = d.doctor_id)
+                     ->  Bitmap Heap Scan on appointments a  (cost=4.78..160.09 rows=47 width=25) (actual time=0.011..0.087 rows=39 loops=1)
+                           Recheck Cond: (patient_id = 100)
+                           Heap Blocks: exact=38
+                           ->  Bitmap Index Scan on idx_appointments_patient_start  (cost=0.00..4.77 rows=47 width=0) (actual time=0.007..0.007 rows=39 loops=1)
+                                 Index Cond: (patient_id = 100)
+                     ->  Hash  (cost=1.30..1.30 rows=30 width=21) (actual time=0.010..0.011 rows=30 loops=1)
+                           Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                           ->  Seq Scan on doctors d  (cost=0.00..1.30 rows=30 width=21) (actual time=0.003..0.005 rows=30 loops=1)
+               ->  Index Scan using visits_appointment_id_key on visits v  (cost=0.29..7.88 rows=1 width=8) (actual time=0.003..0.003 rows=1 loops=39)
+                     Index Cond: (appointment_id = a.appointment_id)
+         ->  Index Scan using idx_diagnoses_visit on diagnoses dg  (cost=0.29..0.36 rows=1 width=18) (actual time=0.002..0.003 rows=1 loops=39)
+               Index Cond: (visit_id = v.visit_id)
+ Planning Time: 0.620 ms
+ Execution Time: 0.438 ms
+(21 rows)
+
+=== Q2 doctor workload per branch, June 2025
+                                                                                            QUERY PLAN                                                                                            
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=296.42..296.44 rows=10 width=47) (actual time=2.407..2.409 rows=10 loops=1)
+   ->  Sort  (cost=296.42..296.64 rows=90 width=47) (actual time=2.407..2.408 rows=10 loops=1)
+         Sort Key: (count(*)) DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=293.57..294.47 rows=90 width=47) (actual time=2.393..2.397 rows=30 loops=1)
+               Group Key: b.name, d.full_name
+               Batches: 1  Memory Usage: 24kB
+               ->  Hash Join  (cost=3.04..251.72 rows=5581 width=39) (actual time=0.025..1.619 rows=5770 loops=1)
+                     Hash Cond: (d.branch_id = b.branch_id)
+                     ->  Hash Join  (cost=1.97..215.31 rows=5581 width=21) (actual time=0.019..1.087 rows=5770 loops=1)
+                           Hash Cond: (a.doctor_id = d.doctor_id)
+                           ->  Index Scan using idx_appointments_completed_start on appointments a  (cost=0.29..196.91 rows=5581 width=4) (actual time=0.007..0.450 rows=5770 loops=1)
+                                 Index Cond: ((scheduled_start >= '2025-06-01 00:00:00+00'::timestamp with time zone) AND (scheduled_start < '2025-07-01 00:00:00+00'::timestamp with time zone))
+                           ->  Hash  (cost=1.30..1.30 rows=30 width=25) (actual time=0.007..0.007 rows=30 loops=1)
+                                 Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                                 ->  Seq Scan on doctors d  (cost=0.00..1.30 rows=30 width=25) (actual time=0.001..0.003 rows=30 loops=1)
+                     ->  Hash  (cost=1.03..1.03 rows=3 width=26) (actual time=0.003..0.003 rows=3 loops=1)
+                           Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                           ->  Seq Scan on branches b  (cost=0.00..1.03 rows=3 width=26) (actual time=0.002..0.002 rows=3 loops=1)
+ Planning Time: 0.161 ms
+ Execution Time: 2.430 ms
+(21 rows)
+
+=== Q3 ten most prescribed drugs
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=2846.85..2846.87 rows=10 width=29) (actual time=26.398..26.401 rows=10 loops=1)
+   ->  Sort  (cost=2846.85..2846.91 rows=25 width=29) (actual time=26.398..26.399 rows=10 loops=1)
+         Sort Key: (count(*)) DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=2846.06..2846.31 rows=25 width=29) (actual time=26.388..26.391 rows=25 loops=1)
+               Group Key: dr.name
+               Batches: 1  Memory Usage: 24kB
+               ->  Hash Join  (cost=1.56..2144.73 rows=93510 width=17) (actual time=0.011..16.209 rows=93510 loops=1)
+                     Hash Cond: (p.drug_id = dr.drug_id)
+                     ->  Seq Scan on prescriptions p  (cost=0.00..1856.10 rows=93510 width=8) (actual time=0.002..4.567 rows=93510 loops=1)
+                     ->  Hash  (cost=1.25..1.25 rows=25 width=17) (actual time=0.006..0.006 rows=25 loops=1)
+                           Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                           ->  Seq Scan on drugs dr  (cost=0.00..1.25 rows=25 width=17) (actual time=0.001..0.003 rows=25 loops=1)
+ Planning Time: 0.190 ms
+ Execution Time: 26.420 ms
+(15 rows)
+
+=== Q4 everything one patient was prescribed
+                                                                           QUERY PLAN                                                                            
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=552.27..552.38 rows=44 width=45) (actual time=0.287..0.289 rows=36 loops=1)
+   Sort Key: a.scheduled_start DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  Nested Loop  (cost=5.51..551.07 rows=44 width=45) (actual time=0.029..0.262 rows=36 loops=1)
+         ->  Nested Loop  (cost=5.37..546.08 rows=44 width=36) (actual time=0.025..0.237 rows=36 loops=1)
+               ->  Nested Loop  (cost=5.07..530.66 rows=38 width=12) (actual time=0.021..0.148 rows=30 loops=1)
+                     ->  Bitmap Heap Scan on appointments a  (cost=4.78..160.09 rows=47 width=12) (actual time=0.016..0.055 rows=39 loops=1)
+                           Recheck Cond: (patient_id = 100)
+                           Heap Blocks: exact=38
+                           ->  Bitmap Index Scan on idx_appointments_patient_start  (cost=0.00..4.77 rows=47 width=0) (actual time=0.011..0.011 rows=39 loops=1)
+                                 Index Cond: (patient_id = 100)
+                     ->  Index Scan using visits_appointment_id_key on visits v  (cost=0.29..7.88 rows=1 width=8) (actual time=0.002..0.002 rows=1 loops=39)
+                           Index Cond: (appointment_id = a.appointment_id)
+               ->  Index Scan using idx_prescriptions_visit on prescriptions p  (cost=0.29..0.39 rows=2 width=32) (actual time=0.002..0.003 rows=1 loops=30)
+                     Index Cond: (visit_id = v.visit_id)
+         ->  Memoize  (cost=0.15..0.17 rows=1 width=17) (actual time=0.001..0.001 rows=1 loops=36)
+               Cache Key: p.drug_id
+               Cache Mode: logical
+               Hits: 18  Misses: 18  Evictions: 0  Overflows: 0  Memory Usage: 3kB
+               ->  Index Scan using drugs_pkey on drugs dr  (cost=0.14..0.16 rows=1 width=17) (actual time=0.001..0.001 rows=1 loops=18)
+                     Index Cond: (drug_id = p.drug_id)
+ Planning Time: 0.282 ms
+ Execution Time: 0.338 ms
+(23 rows)
+
+=== Q5 one doctor, one week
+                                                                                             QUERY PLAN                                                                                             
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=192.48..192.62 rows=57 width=25) (actual time=0.062..0.064 rows=56 loops=1)
+   Sort Key: scheduled_start
+   Sort Method: quicksort  Memory: 28kB
+   ->  Bitmap Heap Scan on appointments  (cost=5.14..190.82 rows=57 width=25) (actual time=0.018..0.055 rows=56 loops=1)
+         Recheck Cond: ((doctor_id = 7) AND (scheduled_start >= '2025-06-02 00:00:00+00'::timestamp with time zone) AND (scheduled_start < '2025-06-09 00:00:00+00'::timestamp with time zone))
+         Heap Blocks: exact=18
+         ->  Bitmap Index Scan on appointments_doctor_id_scheduled_start_key  (cost=0.00..5.13 rows=57 width=0) (actual time=0.015..0.015 rows=56 loops=1)
+               Index Cond: ((doctor_id = 7) AND (scheduled_start >= '2025-06-02 00:00:00+00'::timestamp with time zone) AND (scheduled_start < '2025-06-09 00:00:00+00'::timestamp with time zone))
+ Planning Time: 0.039 ms
+ Execution Time: 0.070 ms
+(10 rows)
+
