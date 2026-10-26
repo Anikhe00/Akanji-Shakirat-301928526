@@ -1,0 +1,71 @@
+
+=== A. Start a transaction, change the stock, look, then ROLLBACK ===
+BEGIN;
+BEGIN
+UPDATE drugs SET stock_quantity = stock_quantity - 6 WHERE name = 'Demo Artesunate';
+UPDATE 1
+SELECT name, stock_quantity FROM drugs WHERE name = 'Demo Artesunate';
+      name       | stock_quantity 
+-----------------+----------------
+ Demo Artesunate |              4
+(1 row)
+
+ROLLBACK;
+ROLLBACK
+SELECT name, stock_quantity FROM drugs WHERE name = 'Demo Artesunate';
+      name       | stock_quantity 
+-----------------+----------------
+ Demo Artesunate |             10
+(1 row)
+
+
+=== B. A successful dispense: both changes saved together with COMMIT ===
+BEGIN;
+BEGIN
+UPDATE prescriptions SET dispensed_at = now()
+ WHERE quantity = 6 AND drug_id = (SELECT drug_id FROM drugs WHERE name = 'Demo Artesunate');
+UPDATE 1
+UPDATE drugs SET stock_quantity = stock_quantity - 6 WHERE name = 'Demo Artesunate';
+UPDATE 1
+COMMIT;
+COMMIT
+SELECT p.quantity, p.dispensed_at IS NOT NULL AS dispensed, d.stock_quantity AS stock_left
+FROM prescriptions p JOIN drugs d ON d.drug_id = p.drug_id
+WHERE d.name = 'Demo Artesunate' ORDER BY p.quantity;
+ quantity | dispensed | stock_left 
+----------+-----------+------------
+        6 | t         |          4
+        8 | f         |          4
+(2 rows)
+
+
+=== C. A failing dispense: 8 units wanted but only 4 left. Nothing must be half-saved ===
+BEGIN;
+BEGIN
+UPDATE prescriptions SET dispensed_at = now()
+ WHERE quantity = 8 AND drug_id = (SELECT drug_id FROM drugs WHERE name = 'Demo Artesunate');
+UPDATE 1
+SELECT p.quantity, p.dispensed_at IS NOT NULL AS dispensed
+FROM prescriptions p JOIN drugs d ON d.drug_id = p.drug_id
+WHERE d.name = 'Demo Artesunate' AND p.quantity = 8;
+ quantity | dispensed 
+----------+-----------
+        8 | t
+(1 row)
+
+UPDATE drugs SET stock_quantity = stock_quantity - 8 WHERE name = 'Demo Artesunate';
+SELECT 'this statement is ignored because the transaction has failed';
+ERROR:  new row for relation "drugs" violates check constraint "drugs_stock_quantity_check"
+DETAIL:  Failing row contains (26, Demo Artesunate, 60mg, 1800.00, -4).
+ERROR:  current transaction is aborted, commands ignored until end of transaction block
+ROLLBACK;
+ROLLBACK
+SELECT p.quantity, p.dispensed_at IS NOT NULL AS dispensed, d.stock_quantity AS stock_left
+FROM prescriptions p JOIN drugs d ON d.drug_id = p.drug_id
+WHERE d.name = 'Demo Artesunate' ORDER BY p.quantity;
+ quantity | dispensed | stock_left 
+----------+-----------+------------
+        6 | t         |          4
+        8 | f         |          4
+(2 rows)
+
