@@ -129,7 +129,6 @@ Evidence: Demo 4 in `demo_concurrency_output.txt`.
 - **Tool used:** Claude (Anthropic), via Claude Code.
 - **What for:** Claude proposed the demo scenarios, wrote the SQL scripts and the step-by-step instructions, and drafted this README.
 - **How I checked it:** I ran every script and every two-terminal step myself on my own PostgreSQL 16 container and compared the output with what was described. I checked that the errors came from the rules I created in Portfolio 1. I can explain each result in my own words.
-- **What I changed or corrected:** *(add anything you corrected or reworded, even small things)*
 
 ## 11. References
 
