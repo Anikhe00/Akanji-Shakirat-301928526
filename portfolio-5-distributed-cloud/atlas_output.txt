@@ -1,0 +1,40 @@
+Paste your Atlas connection string (it stays hidden), then press Enter: 
+
+Step 1: importing 200 patient documents into Atlas...
+2026-11-08T13:30:16.182+0000	connected to: mongodb+srv://[**REDACTED**]@carebridge.lrvoopg.mongodb.net/
+2026-11-08T13:30:16.321+0000	dropping: `carebridge.patients`
+2026-11-08T13:30:19.188+0000	carebridge.patients	4.09MB
+2026-11-08T13:30:20.166+0000	carebridge.patients	4.09MB
+2026-11-08T13:30:20.166+0000	200 document(s) imported successfully. 0 document(s) failed to import.
+
+Step 2: running the replica set checks on Atlas...
+=== 1. Is this a replica set? (db.hello) ===
+replica set name : atlas-g086eg-shard-0
+connected to     : ac-emymtwt-shard-00-02.lrvoopg.mongodb.net:27017
+current primary  : ac-emymtwt-shard-00-02.lrvoopg.mongodb.net:27017
+members seen     : 3
+   - ac-emymtwt-shard-00-00.lrvoopg.mongodb.net:27017
+   - ac-emymtwt-shard-00-01.lrvoopg.mongodb.net:27017
+   - ac-emymtwt-shard-00-02.lrvoopg.mongodb.net:27017
+
+=== 2. Member roles (rs.status, may be restricted on a free cluster) ===
+   ac-emymtwt-shard-00-00.lrvoopg.mongodb.net:27017  ->  SECONDARY
+   ac-emymtwt-shard-00-01.lrvoopg.mongodb.net:27017  ->  SECONDARY
+   ac-emymtwt-shard-00-02.lrvoopg.mongodb.net:27017  ->  PRIMARY
+
+=== 3. The imported data ===
+200 patient documents are in Atlas
+
+=== 4. A write that must reach the MAJORITY of nodes before it is confirmed ===
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+=== 5. Reading from the PRIMARY and from a SECONDARY (read preference) ===
+read preference 'primary'   was served by: ac-emymtwt-shard-00-02.lrvoopg.mongodb.net
+read preference 'secondary' was served by: ac-emymtwt-shard-00-00.lrvoopg.mongodb.net
+the secondary returned patient 100 (Sade Agu), atlas_test = Sun Nov 08 2026 13:30:22 GMT+0000 (Coordinated Universal Time)
