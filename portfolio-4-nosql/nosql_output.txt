@@ -1,0 +1,149 @@
+Step 1: exporting patient documents from PostgreSQL (can take up to a minute)...
+Exported 200 documents to patients.jsonl
+
+Step 2: importing into MongoDB...
+2026-11-08T06:37:02.823+0000	connected to: mongodb://localhost/
+2026-11-08T06:37:02.823+0000	dropping: `carebridge.patients`
+2026-11-08T06:37:02.902+0000	200 document(s) imported successfully. 0 document(s) failed to import.
+
+Step 3: running the queries...
+=== 1. How many patient documents were imported? ===
+200 patient documents
+
+=== 2. One patient's WHOLE record in a single read (patient 100) ===
+Sade Agu has 30 visits. Here is the first visit, with its doctor, diagnoses, prescriptions, lab orders and payments embedded:
+{
+  notes: 'Routine consultation',
+  doctor: {
+    city: 'Oyo',
+    name: 'Dr Blessing Okafor',
+    branch: 'CareBridge Oyo Town',
+    doctor_id: 8
+  },
+  payments: [
+    {
+      amount: 12000,
+      method: 'insurance'
+    }
+  ],
+  visit_id: 52,
+  diagnoses: [
+    {
+      icd_code: 'D64.9',
+      condition_name: 'Anaemia'
+    }
+  ],
+  lab_orders: [],
+  visit_date: ISODate('2025-01-06T09:05:00.000Z'),
+  prescriptions: [
+    {
+      drug: 'Amlodipine',
+      dosage: '2 tablets three times daily',
+      quantity: 11,
+      strength: '100mg',
+      duration_days: 9
+    }
+  ]
+}
+
+=== 3. Everything patient 100 was prescribed, 5 most recent (the SQL version needs a 4-table join) ===
+[
+  {
+    visit_date: ISODate('2026-01-20T09:05:00.000Z'),
+    drug: 'Fluconazole',
+    dosage: '1 tablet at night'
+  },
+  {
+    visit_date: ISODate('2026-01-20T09:05:00.000Z'),
+    drug: 'Atorvastatin',
+    dosage: '5ml twice daily'
+  },
+  {
+    visit_date: ISODate('2026-01-05T14:05:00.000Z'),
+    drug: 'Amoxicillin',
+    dosage: '5ml twice daily'
+  },
+  {
+    visit_date: ISODate('2025-12-28T07:05:00.000Z'),
+    drug: 'Diclofenac',
+    dosage: '2 tablets three times daily'
+  },
+  {
+    visit_date: ISODate('2025-12-18T14:05:00.000Z'),
+    drug: 'Vitamin C',
+    dosage: '2 tablets three times daily'
+  }
+]
+
+=== 4. Five most common diagnoses across all patients ===
+[
+  {
+    _id: 'Type 2 diabetes',
+    cases: 990
+  },
+  {
+    _id: 'Upper respiratory infection',
+    cases: 962
+  },
+  {
+    _id: 'Anaemia',
+    cases: 956
+  },
+  {
+    _id: 'Asthma',
+    cases: 952
+  },
+  {
+    _id: 'Urinary tract infection',
+    cases: 951
+  }
+]
+
+=== 5. Three patients who have paid the most in total ===
+[
+  {
+    _id: 1,
+    name: 'Tobi Okonkwo',
+    visits: 549,
+    total_paid: 4295750
+  },
+  {
+    _id: 2,
+    name: 'Hadiza Afolabi',
+    visits: 237,
+    total_paid: 1948750
+  },
+  {
+    _id: 4,
+    name: 'Chinedu Danjuma',
+    visits: 179,
+    total_paid: 1384750
+  }
+]
+
+=== 6. Flexible schema: add a new field to ONE patient, no table change needed ===
+{
+  _id: 100,
+  last_name: 'Agu',
+  first_name: 'Sade',
+  emergency_contact: {
+    name: 'Test Contact',
+    phone: '08000000000'
+  }
+}
+1 of 200 patients have this field. The rest are untouched and still valid.
+
+=== 7. Indexing: which patient does visit 2871 belong to? (without and with an index) ===
+WITHOUT index: plan = COLLSCAN, documents examined = 200, returned = 1, time = 0 ms
+WITH index   : plan = FETCH > IXSCAN, documents examined = 1, returned = 1, time = 0 ms
+
+=== 8. Document growth: the biggest patient document ===
+[
+  {
+    _id: 1,
+    name: 'Tobi Okonkwo',
+    visits: 549,
+    size_bytes: 286923
+  }
+]
+MongoDB's hard limit is 16,777,216 bytes (16 MB) per document.
