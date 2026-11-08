@@ -136,7 +136,6 @@ Screenshots are from my own terminal and the Atlas dashboard. The full text outp
 - **Tool used:** Claude (Anthropic), via Claude Code.
 - **What for:** Claude proposed the replication and Atlas demos, wrote the Docker Compose file, the scripts and the checks, helped me debug setup problems (for example a script permission error in the Docker container and an Atlas network access error), and drafted this README from the output of the scripts I ran.
 - **How I checked it:** I ran every script myself on my own machine and my own Atlas cluster, read each result, and compared it with the behaviour described above. The password in one error message was exposed, so I deleted that output, changed the Atlas password, and the script now hides it. I can explain replication, lag, failover, majority writes and the sharding options in my own words.
-- **What I changed or corrected:** *(add anything you changed or fixed yourself)*
 
 ## 11. References
 
