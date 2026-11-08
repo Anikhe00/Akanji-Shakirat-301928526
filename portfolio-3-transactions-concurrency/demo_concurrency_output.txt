@@ -1,0 +1,48 @@
+
+==============================================================
+DEMO 2, PART 1: lost update (no lock). Stock is 10. A dispenses 6, B dispenses 4. Correct final stock = 0
+==============================================================
+05:50:44.514  A: reads stock = 10
+05:50:45.522  B: reads stock = 10
+05:50:47.523  A: COMMIT done, A wrote 4
+05:50:49.528  B: COMMIT done, B wrote 6
+FINAL stock = 6
+-> B still used its old reading of 10, so A's dispensing of 6 was overwritten and lost.
+
+==============================================================
+DEMO 2, PART 2: the fix, SELECT ... FOR UPDATE (row lock). Same task, correct final stock = 0
+==============================================================
+05:50:49.705  A: reads stock = 10 and LOCKS the row
+05:50:50.711  B: asks for the row with FOR UPDATE (it must WAIT, A holds the lock)
+05:50:52.716  A: COMMIT done, A wrote 4 (lock released)
+05:50:52.716  B: finally got the row, stock = 4
+05:50:52.718  B: COMMIT done, B wrote 0
+FINAL stock = 0
+-> B waited for A, then saw the latest value (4), so both dispensings counted.
+
+==============================================================
+DEMO 3: isolation level READ COMMITTED. A reads stock twice in one transaction; B dispenses 3 in between
+==============================================================
+05:50:52.928  A: FIRST read  = 10
+05:50:53.934  B: dispensed 3 and committed (stock is now 7 for everyone new)
+05:50:55.938  A: SECOND read = 7
+
+==============================================================
+DEMO 3: isolation level REPEATABLE READ. A reads stock twice in one transaction; B dispenses 3 in between
+==============================================================
+05:50:56.108  A: FIRST read  = 10
+05:50:57.119  B: dispensed 3 and committed (stock is now 7 for everyone new)
+05:50:59.117  A: SECOND read = 10
+-> READ COMMITTED: A's second read changed (7). REPEATABLE READ: A kept its snapshot (10).
+
+==============================================================
+DEMO 4: two receptionists book Doctor 1 at the same time slot (UNIQUE rule from Portfolio 1)
+==============================================================
+05:50:59.281  A: inserted the booking (not committed yet)
+05:51:00.288  B: tries to insert the SAME doctor and time (it must WAIT for A)
+05:51:02.288  A: COMMIT done, the booking is now permanent
+05:51:02.288  B: REJECTED -> duplicate key value violates unique constraint "appointments_doctor_id_scheduled_start_key"
+FINAL bookings for Doctor 1 at that time = 1
+-> B waited, then the database refused the double booking. Exactly one booking exists.
+
+All demos finished.
