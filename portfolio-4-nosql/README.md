@@ -137,7 +137,6 @@ I chose the document type for the implementation because patient records are the
 - **Tool used:** Claude (Anthropic), via Claude Code.
 - **What for:** Claude proposed the document structure, wrote the export SQL, the `mongosh` queries and the run script, and drafted this README, from the output of the scripts I ran. I reviewed the README against my own results.
 - **How I checked it:** I ran the script on my own machine against my own PostgreSQL and MongoDB containers, confirmed 200 documents imported with 0 failures, read the query results, and compared patient 100's embedded record with the same patient's rows in PostgreSQL. I can explain the model, the queries and the trade-offs in my own words.
-- **What I changed or corrected:** *(add anything you changed, even small things such as a file you had to rename)*
 
 ## 11. References
 
