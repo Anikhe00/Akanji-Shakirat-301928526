@@ -1,0 +1,45 @@
+# Portfolio 5: a PostgreSQL primary and a streaming replica.
+# Separate from the main docker-compose.yml, so it never touches your Portfolio 1 to 4 database.
+services:
+  pg-primary:
+    image: postgres:16
+    container_name: carebridge-pg-primary
+    environment:
+      POSTGRES_USER: carebridge
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: carebridge
+    volumes:
+      - pgdata_primary:/var/lib/postgresql/data
+      - ./init-primary.sql:/docker-entrypoint-initdb.d/01-replication.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U carebridge -d carebridge"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  pg-replica:
+    image: postgres:16
+    container_name: carebridge-pg-replica
+    depends_on:
+      pg-primary:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: replpass
+    volumes:
+      - pgdata_replica:/var/lib/postgresql/data
+    # On first start: copy the primary's data with pg_basebackup (-R makes this server a standby),
+    # then start PostgreSQL normally. It then streams changes from the primary continuously.
+    command:
+      - bash
+      - -c
+      - |
+        if [ ! -s /var/lib/postgresql/data/PG_VERSION ]; then
+          chown -R postgres:postgres /var/lib/postgresql/data
+          chmod 700 /var/lib/postgresql/data
+          gosu postgres pg_basebackup -h pg-primary -U replicator -D /var/lib/postgresql/data -R -X stream
+        fi
+        exec docker-entrypoint.sh postgres
+
+volumes:
+  pgdata_primary:
+  pgdata_replica:

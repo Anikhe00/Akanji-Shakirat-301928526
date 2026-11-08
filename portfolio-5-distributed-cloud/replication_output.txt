@@ -1,0 +1,66 @@
+
+==============================================================
+SETUP: starting a fresh primary and replica
+==============================================================
+ Network portfolio-5-distributed-cloud_default Creating 
+ Volume portfolio-5-distributed-cloud_pgdata_primary Creating 
+ Volume portfolio-5-distributed-cloud_pgdata_replica Creating 
+ Volume portfolio-5-distributed-cloud_pgdata_replica Creating 
+ Volume portfolio-5-distributed-cloud_pgdata_primary Creating 
+ Network portfolio-5-distributed-cloud_default Creating 
+ Volume portfolio-5-distributed-cloud_pgdata_replica Created 
+ Volume portfolio-5-distributed-cloud_pgdata_replica Created 
+ Volume portfolio-5-distributed-cloud_pgdata_primary Created 
+ Volume portfolio-5-distributed-cloud_pgdata_primary Created 
+ Network portfolio-5-distributed-cloud_default Created 
+ Network portfolio-5-distributed-cloud_default Created 
+ Container carebridge-pg-primary Creating 
+ Container carebridge-pg-primary Created 
+ Container carebridge-pg-replica Creating 
+ Container carebridge-pg-replica Created 
+ Container carebridge-pg-primary Starting 
+ Container carebridge-pg-primary Started 
+ Container carebridge-pg-primary Waiting 
+ Container carebridge-pg-primary Healthy 
+ Container carebridge-pg-replica Starting 
+ Container carebridge-pg-replica Started 
+Waiting for the replica to start streaming from the primary...
+Replicas streaming from the primary: 1
+
+==============================================================
+1. Which server is which?
+==============================================================
+PRIMARY: pg_is_in_recovery = false
+REPLICA: pg_is_in_recovery = true   (true means it is a standby that copies the primary)
+
+==============================================================
+2. Load the Portfolio 1 schema on the PRIMARY only, then read it on the REPLICA
+==============================================================
+PRIMARY: tables created = 11
+REPLICA: tables it received = 11
+REPLICA: stock of the demo drug = 10
+
+==============================================================
+3. The replica is read-only: a write on the REPLICA is refused
+==============================================================
+ERROR:  cannot execute UPDATE in a read-only transaction
+
+==============================================================
+4. Replication lag: pause the replica, change the primary, compare
+==============================================================
+PRIMARY: stock of the demo drug = 8
+REPLICA (paused, stale): stock of the demo drug = 10
+PRIMARY says the replica is 112 bytes behind
+Now resume the replica...
+REPLICA (resumed): stock of the demo drug = 8
+PRIMARY says the replica is 0 bytes behind
+
+==============================================================
+5. Failover: the primary dies, the replica is promoted
+==============================================================
+The primary has been stopped.
+Promotion requested: true
+Old REPLICA now: pg_is_in_recovery = false   (false means it is a primary and accepts writes)
+NEW PRIMARY (after write): stock of the demo drug = 5
+
+Done. The old primary is stopped and was NOT rebuilt as a replica (see the README limitations).
