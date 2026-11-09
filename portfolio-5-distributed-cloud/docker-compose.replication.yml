@@ -10,7 +10,7 @@ services:
       POSTGRES_DB: carebridge
     volumes:
       - pgdata_primary:/var/lib/postgresql/data
-      - ./init-primary.sql:/docker-entrypoint-initdb.d/01-replication.sql:ro
+      - ./Akanji_Shakirat_301928526_P5_InitPrimary.sql:/docker-entrypoint-initdb.d/01-replication.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U carebridge -d carebridge"]
       interval: 3s

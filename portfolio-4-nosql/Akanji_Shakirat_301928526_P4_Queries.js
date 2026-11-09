@@ -1,5 +1,5 @@
 // Portfolio 4: MongoDB queries on the CareBridge patient documents.
-// Run by run_nosql_demo.sh through mongosh (database: carebridge, collection: patients).
+// Run by Akanji_Shakirat_301928526_P4_RunNosqlDemo.sh through mongosh (database: carebridge, collection: patients).
 
 const pts = db.patients;
 

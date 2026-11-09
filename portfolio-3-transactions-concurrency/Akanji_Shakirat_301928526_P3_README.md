@@ -15,31 +15,31 @@ This portfolio uses four small demonstrations to show how PostgreSQL keeps CareB
 | 3 | Isolation levels | A report reads stock twice while another nurse dispenses | `READ COMMITTED` shows the change mid-transaction; `REPEATABLE READ` does not |
 | 4 | Concurrent double-booking | Two receptionists book the same doctor and time | The second booking waits, then is rejected by the UNIQUE rule from Portfolio 1 |
 
-All demos use one test drug, **Demo Artesunate** (stock 10), created by `setup_demo.sql`, so the real seed data is untouched.
+All demos use one test drug, **Demo Artesunate** (stock 10), created by `Akanji_Shakirat_301928526_P3_SetupDemo.sql`, so the real seed data is untouched.
 
 ## 2. Files
 
 | File | Purpose |
 |---|---|
-| `setup_demo.sql` | Re-runnable reset: creates the test drug and two prescriptions on visit 1 (quantities 6 and 8) |
-| `demo1_atomicity.sql` | Demo 1 script (parts A, B, C) |
-| `demo1_output.txt` | Captured output of Demo 1 |
-| `demo_concurrency.sh` | Runs Demos 2 to 4: opens two database sessions (A and B) at the same time and prints a timestamped timeline |
-| `demo_concurrency_output.txt` | Captured output of Demos 2 to 4 |
+| `Akanji_Shakirat_301928526_P3_SetupDemo.sql` | Re-runnable reset: creates the test drug and two prescriptions on visit 1 (quantities 6 and 8) |
+| `Akanji_Shakirat_301928526_P3_Demo1Atomicity.sql` | Demo 1 script (parts A, B, C) |
+| `Akanji_Shakirat_301928526_P3_Demo1Output.txt` | Captured output of Demo 1 |
+| `Akanji_Shakirat_301928526_P3_DemoConcurrency.sh` | Runs Demos 2 to 4: opens two database sessions (A and B) at the same time and prints a timestamped timeline |
+| `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt` | Captured output of Demos 2 to 4 |
 | `evidence/` | Optional screenshots of the terminal output |
 
 ## 3. How to run
 
 ```bash
 docker compose up -d
-docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-3-transactions-concurrency/setup_demo.sql
-docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-3-transactions-concurrency/demo1_atomicity.sql
+docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_SetupDemo.sql
+docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_Demo1Atomicity.sql
 ```
 
-Demos 2 to 4 need two database sessions running at the same time. `demo_concurrency.sh` starts both (session A and session B), with short pauses so they overlap in a controlled way, and merges their output by time:
+Demos 2 to 4 need two database sessions running at the same time. `Akanji_Shakirat_301928526_P3_DemoConcurrency.sh` starts both (session A and session B), with short pauses so they overlap in a controlled way, and merges their output by time:
 
 ```bash
-bash portfolio-3-transactions-concurrency/demo_concurrency.sh 2>&1 | tee portfolio-3-transactions-concurrency/demo_concurrency_output.txt
+bash portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_DemoConcurrency.sh 2>&1 | tee portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt
 ```
 
 Every output line starts with the time, so the output reads as a timeline. The results are described in sections 5 to 7 below.
@@ -58,7 +58,7 @@ Every output line starts with the time, so the output reads as a timeline. The r
 
 **Consistency link.** The error in part C is Consistency (the C in ACID). The database refuses a state that breaks a rule, and the rollback makes sure nothing half-finished is kept.
 
-Evidence: `demo1_output.txt`.
+Evidence: `Akanji_Shakirat_301928526_P3_Demo1Output.txt`.
 
 ## 5. Demo 2: Lost update
 
@@ -72,7 +72,7 @@ Evidence: `demo1_output.txt`.
 
 **Alternative.** A single atomic statement such as `UPDATE drugs SET stock_quantity = stock_quantity - 4 WHERE …` also avoids the problem, because the arithmetic happens inside the database. `FOR UPDATE` is needed when the application must read the value, make a decision, and then write.
 
-Evidence: Demo 2 parts 1 and 2 in `demo_concurrency_output.txt`.
+Evidence: Demo 2 parts 1 and 2 in `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt`.
 
 ## 6. Demo 3: Isolation levels
 
@@ -89,7 +89,7 @@ Evidence: Demo 2 parts 1 and 2 in `demo_concurrency_output.txt`.
 
 **Trade-off.** Stronger isolation gives more consistent views, but a `REPEATABLE READ` transaction that tries to update a row changed by someone else after its snapshot is aborted with a serialization error and must be retried.
 
-Evidence: the two Demo 3 runs in `demo_concurrency_output.txt`.
+Evidence: the two Demo 3 runs in `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt`.
 
 ## 7. Demo 4: Concurrent double-booking
 
@@ -106,7 +106,7 @@ A final count showed exactly **1** booking for that doctor and slot.
 
 **Why it matters.** A "check if free, then insert" check in application code is not safe, because both receptionists can check at the same moment and both see "free". The database constraint closes that gap, so the rule holds under concurrency without any extra code. If A had rolled back instead, B's insert would have succeeded.
 
-Evidence: Demo 4 in `demo_concurrency_output.txt`.
+Evidence: Demo 4 in `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt`.
 
 ## 8. ACID summary
 

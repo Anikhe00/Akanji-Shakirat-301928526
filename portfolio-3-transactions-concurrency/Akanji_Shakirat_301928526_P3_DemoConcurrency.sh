@@ -2,7 +2,7 @@
 # Portfolio 3, Demos 2 to 4: two database sessions (A and B) running at the same time.
 #
 # Run from the repo root:
-#   bash portfolio-3-transactions-concurrency/demo_concurrency.sh 2>&1 | tee portfolio-3-transactions-concurrency/demo_concurrency_output.txt
+#   bash portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_DemoConcurrency.sh 2>&1 | tee portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt
 #
 # Each demo starts session A and session B together. Every line printed starts with the
 # time (HH:MM:SS.mmm), and the two sessions' lines are merged in time order, so you can
