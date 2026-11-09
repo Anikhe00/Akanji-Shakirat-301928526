@@ -11,3 +11,9 @@ The screenshots are in the `evidence/` subfolder and come from my own terminal. 
 | 5 | Delete a patient who has appointments | foreign key `appointments.patient_id` | [Delete patient with appointment](evidence/Akanji_Shakirat_301928526_P1_ConstraintDeletePatientWithAppointment.png) |
 
 All five statements were rejected by the database, and no data changed.
+
+## Join query
+
+`Akanji_Shakirat_301928526_P1_JoinPrescriptions.sql` joins `prescriptions`, `visits`, `appointments`, `patients`, `doctors` and `drugs`. It finds the patient and the doctor behind each prescription through foreign keys, without storing them twice in `prescriptions`. The screenshot shows the first five rows from the full 20,000-patient database.
+
+![Join across six tables, five rows](evidence/Akanji_Shakirat_301928526_P1_JoinPrescriptions.png)
