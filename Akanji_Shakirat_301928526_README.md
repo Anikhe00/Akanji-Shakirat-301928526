@@ -2,6 +2,7 @@
 
 **Module:** MIT 8103 Advanced Database Systems
 **Student:** Shakirat Akanji, MSc Information Technology
+**Student number:** 301928526
 **Case study:** CareBridge Clinics, a simulated group of 3 private clinics in Oyo State, Nigeria. All data is invented. No real patient data is used.
 
 ## What this project is
@@ -14,13 +15,13 @@ The seeded database holds 20,000 patients and about 80,000 visits.
 
 | # | Topic | What it shows | Folder |
 |---|---|---|---|
-| 1 | Database design | An 11-table PostgreSQL schema with primary and foreign keys, `CHECK` and `UNIQUE` rules, and seed data | `portfolio-1-.../` |
-| 2 | Query optimisation | Slow queries analysed with `EXPLAIN ANALYZE` and fixed with indexes | `portfolio-2-.../` |
-| 3 | Transactions and concurrency | Rollback, lost update and `SELECT ... FOR UPDATE`, isolation levels, concurrent double-booking | `portfolio-3-transactions-concurrency/` |
-| 4 | NoSQL (MongoDB) | 200 patients remodelled as documents, eight queries, indexing, and when a document database fits | `portfolio-4-nosql/` |
-| 5 | Distributed and cloud | PostgreSQL primary-replica replication with failover, and a 3-node MongoDB Atlas replica set; sharding and CAP discussed | `portfolio-5-distributed-cloud/` |
+| 1 | Database design | An 11-table PostgreSQL schema with primary and foreign keys, `CHECK` and `UNIQUE` rules, and seed data | [`portfolio-1-database-design/`](portfolio-1-database-design/) |
+| 2 | Query optimisation | Slow queries analysed with `EXPLAIN ANALYZE` and fixed with indexes | [`portfolio-2-query-optimisation/`](portfolio-2-query-optimisation/) |
+| 3 | Transactions and concurrency | Rollback, lost update and `SELECT ... FOR UPDATE`, isolation levels, concurrent double-booking | [`portfolio-3-transactions-concurrency/`](portfolio-3-transactions-concurrency/) |
+| 4 | NoSQL (MongoDB) | 200 patients remodelled as documents, eight queries, indexing, and when a document database fits | [`portfolio-4-nosql/`](portfolio-4-nosql/) |
+| 5 | Distributed and cloud | PostgreSQL primary-replica replication with failover, and a 3-node MongoDB Atlas replica set; sharding and CAP discussed | [`portfolio-5-distributed-cloud/`](portfolio-5-distributed-cloud/) |
 
-Each folder has its own `README.md` with how to run it, the results, limitations, an AI-use declaration and references. Screenshots are in each folder's `evidence/` folder (Portfolio 3's demos are also saved as text output).
+The overall write-up is in [`Akanji_Shakirat_301928526_FinalSummary.md`](Akanji_Shakirat_301928526_FinalSummary.md). Each folder has its own README (`Akanji_Shakirat_301928526_P<n>_README.md`) with how to run it, the results, limitations, an AI-use declaration and references. Screenshots are in each folder's `evidence/` folder (Portfolio 3's demos are also saved as text output).
 
 ## Main findings
 
@@ -39,8 +40,8 @@ PostgreSQL 16, MongoDB 7, MongoDB Atlas (free M0 cluster), Docker and Docker Com
 Requirements: Docker Desktop and Git.
 
 ```bash
-git clone https://github.com/Anikhe00/advanced-database-portfolio.git
-cd advanced-database-portfolio
+git clone https://github.com/Anikhe00/Akanji-Shakirat-301928526.git
+cd Akanji-Shakirat-301928526
 echo "PG_PASSWORD=choose-a-password" > .env
 docker compose up -d
 ```
@@ -54,4 +55,4 @@ Then follow the "How to run" section in each portfolio's README. Portfolio 5's A
 
 ## AI-use declaration
 
-Claude (Anthropic) was used throughout to propose designs and demos, write scripts, help debug setup problems, and draft the READMEs from the output of scripts I ran. I ran everything myself, checked the results against what was written, and can explain each part. The full declaration, with what I corrected, is in the final documentation and at the end of each portfolio README.
+Claude (Anthropic) was used throughout to propose designs and demos, write scripts, help debug setup problems, and draft the READMEs from the output of scripts I ran. I ran everything myself, checked the results against what was written, and can explain each part. The full declaration is in [`Akanji_Shakirat_301928526_FinalSummary.md`](Akanji_Shakirat_301928526_FinalSummary.md) and at the end of each portfolio README.

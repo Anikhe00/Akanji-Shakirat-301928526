@@ -26,6 +26,8 @@ All demos use one test drug, **Demo Artesunate** (stock 10), created by `Akanji_
 | `Akanji_Shakirat_301928526_P3_Demo1Output.txt` | Captured output of Demo 1 |
 | `Akanji_Shakirat_301928526_P3_DemoConcurrency.sh` | Runs Demos 2 to 4: opens two database sessions (A and B) at the same time and prints a timestamped timeline |
 | `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt` | Captured output of Demos 2 to 4 |
+| `Akanji_Shakirat_301928526_P3_SessionA.sql` | Session A steps for running Demo 2 (fix) and Demo 4 by hand in one terminal |
+| `Akanji_Shakirat_301928526_P3_SessionB.sql` | Session B steps for the second terminal. Run the numbered steps alternately: A, B, A, B |
 | `evidence/` | Optional screenshots of the terminal output |
 
 ## 3. How to run
@@ -41,6 +43,8 @@ Demos 2 to 4 need two database sessions running at the same time. `Akanji_Shakir
 ```bash
 bash portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_DemoConcurrency.sh 2>&1 | tee portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt
 ```
+
+To run Demo 2 (the `FOR UPDATE` fix) and Demo 4 by hand, open two `psql` terminals and follow the numbered steps in `Akanji_Shakirat_301928526_P3_SessionA.sql` and `Akanji_Shakirat_301928526_P3_SessionB.sql`, alternating A, B, A, B. Do not run the two files one after the other, because the demonstration needs the sessions to overlap.
 
 Every output line starts with the time, so the output reads as a timeline. The results are described in sections 5 to 7 below.
 
@@ -58,7 +62,9 @@ Every output line starts with the time, so the output reads as a timeline. The r
 
 **Consistency link.** The error in part C is Consistency (the C in ACID). The database refuses a state that breaks a rule, and the rollback makes sure nothing half-finished is kept.
 
-Evidence: `Akanji_Shakirat_301928526_P3_Demo1Output.txt`.
+Evidence: `Akanji_Shakirat_301928526_P3_Demo1Output.txt`. The image below is *rendered from that saved output file*. It is not a terminal screenshot.
+
+![Demo 1 output rendered from the saved file](evidence/Akanji_Shakirat_301928526_P3_RenderedDemo1Atomicity.png)
 
 ## 5. Demo 2: Lost update
 
@@ -68,7 +74,7 @@ Evidence: `Akanji_Shakirat_301928526_P3_Demo1Output.txt`.
 
 **Part 2, with `SELECT … FOR UPDATE`.** A read the stock with `FOR UPDATE`, which locks the row. When B ran the same statement it **froze and waited**. After A committed (stock 4), B unfroze and saw **4**, not 10. B then wrote 0. **Final stock: 0**, which is correct.
 
-**Why it works.** `FOR UPDATE` makes the second session queue behind the first, so it always works from the latest value. The cost is that sessions wait, which is acceptable for short transactions like dispensing.
+**Why it works.** `FOR UPDATE` makes the second session queue behind the first [2], so it always works from the latest value. The cost is that sessions wait, which is acceptable for short transactions like dispensing.
 
 **Alternative.** A single atomic statement such as `UPDATE drugs SET stock_quantity = stock_quantity - 4 WHERE …` also avoids the problem, because the arithmetic happens inside the database. `FOR UPDATE` is needed when the application must read the value, make a decision, and then write.
 
@@ -76,7 +82,7 @@ Evidence: Demo 2 parts 1 and 2 in `Akanji_Shakirat_301928526_P3_DemoConcurrencyO
 
 ## 6. Demo 3: Isolation levels
 
-**Problem.** Isolation controls what one transaction can see of another's work while both are running. I tested a *non-repeatable read*: reading the same row twice in one transaction and getting two different answers.
+**Problem.** Isolation controls what one transaction can see of another's work while both are running [1]. I tested a *non-repeatable read*: reading the same row twice in one transaction and getting two different answers.
 
 **Setup.** Session A starts a transaction and reads stock (10). Session B then dispenses 3 and commits. Session A reads stock again.
 
@@ -87,13 +93,13 @@ Evidence: Demo 2 parts 1 and 2 in `Akanji_Shakirat_301928526_P3_DemoConcurrencyO
 
 **When to use which.** `READ COMMITTED` is fine for ordinary work such as booking or dispensing, where each statement should see current data. `REPEATABLE READ` suits reports that must be internally consistent, for example an end-of-day stock count that reads several tables and must not drift while it runs.
 
-**Trade-off.** Stronger isolation gives more consistent views, but a `REPEATABLE READ` transaction that tries to update a row changed by someone else after its snapshot is aborted with a serialization error and must be retried.
+**Trade-off.** Stronger isolation gives more consistent views, but a `REPEATABLE READ` transaction that tries to update a row changed by someone else after its snapshot is aborted with a serialization error [1] and must be retried.
 
 Evidence: the two Demo 3 runs in `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt`.
 
 ## 7. Demo 4: Concurrent double-booking
 
-**Problem.** Two receptionists book Dr 1 at the same time slot for different patients. In Portfolio 1 I added `UNIQUE (doctor_id, scheduled_start)` on `appointments` to prevent exactly this.
+**Problem.** Two receptionists book Dr 1 at the same time slot for different patients. In Portfolio 1 I added `UNIQUE (doctor_id, scheduled_start)` on `appointments` to prevent exactly this [3].
 
 **What happened.** Session A inserted the booking and had not yet committed. Session B inserted the same doctor and time. B **did not fail immediately; it waited**, because PostgreSQL could not yet know whether A's booking would stick. When A committed, B failed with:
 
@@ -132,6 +138,8 @@ Evidence: Demo 4 in `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt`.
 
 ## 11. References
 
-- PostgreSQL Documentation, *Transaction Isolation*: https://www.postgresql.org/docs/16/transaction-iso.html
-- PostgreSQL Documentation, *Explicit Locking* (`SELECT … FOR UPDATE`): https://www.postgresql.org/docs/16/explicit-locking.html
-- PostgreSQL Documentation, *Unique Constraints*: https://www.postgresql.org/docs/16/ddl-constraints.html
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Transaction Isolation.* https://www.postgresql.org/docs/16/transaction-iso.html Accessed 8 November 2026.
+
+[2] PostgreSQL Global Development Group. *PostgreSQL 16: Explicit Locking* (`SELECT ... FOR UPDATE`). https://www.postgresql.org/docs/16/explicit-locking.html Accessed 8 November 2026.
+
+[3] PostgreSQL Global Development Group. *PostgreSQL 16: Constraints* (unique constraints). https://www.postgresql.org/docs/16/ddl-constraints.html Accessed 8 November 2026.

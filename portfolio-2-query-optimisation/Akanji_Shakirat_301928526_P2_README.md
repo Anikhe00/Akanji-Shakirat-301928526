@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-This portfolio shows how PostgreSQL executes queries on the CareBridge Clinics database when it holds almost 500,000 rows. I read execution plans with `EXPLAIN (ANALYZE)`, added indexes, and measured the difference. I also explain a query that indexes could not help.
+This portfolio shows how PostgreSQL executes queries on the CareBridge Clinics database when it holds almost 500,000 rows. I read execution plans with `EXPLAIN (ANALYZE)` [1][2], added indexes, and measured the difference. I also explain a query that indexes could not help.
 
 ## 2. Environment
 
@@ -67,7 +67,7 @@ Q1 and Q4 use patient 100, who has 39 appointments.
 | `idx_appointments_patient_start (patient_id, scheduled_start DESC)` | appointments | Finds one patient's appointments already sorted newest first (Q1, Q4) |
 | `idx_diagnoses_visit (visit_id)` | diagnoses | Join column with no index (Q1) |
 | `idx_prescriptions_visit (visit_id)` | prescriptions | Join column with no index (Q4) |
-| `idx_appointments_completed_start (scheduled_start) WHERE status = 'completed'` | appointments | Partial index containing only completed appointments (Q2) |
+| `idx_appointments_completed_start (scheduled_start) WHERE status = 'completed'` | appointments | Partial index containing only completed appointments (Q2) [4] |
 
 PostgreSQL builds indexes automatically for `PRIMARY KEY` and `UNIQUE` constraints, but **not for foreign keys**. That is why `diagnoses.visit_id`, `prescriptions.visit_id` and `appointments.patient_id` needed indexes of their own. I did not index `payments` or `lab_orders`, because none of the five queries uses them.
 
@@ -88,13 +88,23 @@ What changed in the plans:
 - **After**, Q1, Q2 and Q4 use the new indexes instead of sequential scans on the large tables (see `Akanji_Shakirat_301928526_P2_PlansAfter.txt`).
 - **Q3 and Q5** have the same plan shape before and after.
 
+**Evidence for Q1 (my own terminal).** These two screenshots are from a re-run on a rebuilt Docker container, taken after a warm-up run. They show the plan change: before the indexes PostgreSQL reads all of `appointments` (`Seq Scan`, `Rows Removed by Filter: 99961`), and after them it uses `Bitmap Index Scan on idx_appointments_patient_start`. The times in the screenshots (11.021 ms before, 1.255 ms after) differ from the table above (12.777 ms and 0.438 ms), which came from my earlier measurement run. Timings vary with the machine and its load, so the plan change is the evidence, not the exact milliseconds.
+
+![Q1 before the indexes: Seq Scan on appointments, Execution Time 11.021 ms](evidence/Akanji_Shakirat_301928526_P2_BeforeIndex.png)
+
+![Q1 after the indexes: Bitmap Index Scan, Execution Time 1.255 ms](evidence/Akanji_Shakirat_301928526_P2_AfterIndex.png)
+
+The image below is *rendered from the saved output file* `Akanji_Shakirat_301928526_P2_Results.txt`. It is not a terminal screenshot. The text files `Akanji_Shakirat_301928526_P2_PlansBefore.txt` and `Akanji_Shakirat_301928526_P2_PlansAfter.txt` hold the complete plans for all five queries.
+
+![Q1 query results (first rows), rendered from the saved file](evidence/Akanji_Shakirat_301928526_P2_RenderedQ1Results.png)
+
 ## 9. Performance analysis
 
 **Q1 and Q4 improved the most.** They need about 39 rows out of 100,000, which is 0.04% of the table. Without an index, PostgreSQL must read everything to find them. With `idx_appointments_patient_start` it jumps straight to those rows, and the foreign-key indexes on `diagnoses` and `prescriptions` do the same for the next join.
 
-**Q2 improved only a little.** It returns 5,770 of 100,000 rows, about 6% of the table. The partial index skips the other 94%, but the query still has to read, join and group those 5,770 rows. Indexes help less as the query wants a larger part of the table.
+**Q2 improved only a little.** It returns 5,770 of 100,000 rows, about 6% of the table. The partial index skips the other 94% [4], but the query still has to read, join and group those 5,770 rows. Indexes help less as the query wants a larger part of the table.
 
-**Q3 did not improve, and cannot.** It counts prescriptions per drug across the whole table with no `WHERE` filter. An index lets PostgreSQL skip rows, but this query needs every row, so a sequential scan is already the cheapest plan. The 0.7 ms difference is run-to-run noise. A different approach would be needed to speed it up, such as a pre-calculated summary table or a materialised view, which would trade freshness of the data for speed. I did not test those.
+**Q3 did not improve, and cannot.** It counts prescriptions per drug across the whole table with no `WHERE` filter. An index lets PostgreSQL skip rows [3], but this query needs every row, so a sequential scan is already the cheapest plan. The 0.7 ms difference is run-to-run noise. A different approach would be needed to speed it up, such as a pre-calculated summary table or a materialised view, which would trade freshness of the data for speed. I did not test those.
 
 **Q5 did not change.** The `UNIQUE (doctor_id, scheduled_start)` constraint from Portfolio 1 already created an index that suits this query exactly: an exact match on the doctor, then a date range. None of the new indexes applies to it. A difference of 0.010 ms is noise, not a real slowdown.
 
@@ -138,10 +148,13 @@ Add the indexes and run the queries again, twice:
 
 ## 13. References
 
-- PostgreSQL 16 documentation, "Using EXPLAIN": https://www.postgresql.org/docs/16/using-explain.html
-- PostgreSQL 16 documentation, "EXPLAIN": https://www.postgresql.org/docs/16/sql-explain.html
-- PostgreSQL 16 documentation, "Indexes": https://www.postgresql.org/docs/16/indexes.html
-- PostgreSQL 16 documentation, "Partial Indexes": https://www.postgresql.org/docs/16/indexes-partial.html
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Using EXPLAIN.* https://www.postgresql.org/docs/16/using-explain.html Accessed 24 October 2026.
+
+[2] PostgreSQL Global Development Group. *PostgreSQL 16: EXPLAIN.* https://www.postgresql.org/docs/16/sql-explain.html Accessed 24 October 2026.
+
+[3] PostgreSQL Global Development Group. *PostgreSQL 16: Indexes.* https://www.postgresql.org/docs/16/indexes.html Accessed 24 October 2026.
+
+[4] PostgreSQL Global Development Group. *PostgreSQL 16: Partial Indexes.* https://www.postgresql.org/docs/16/indexes-partial.html Accessed 24 October 2026.
 
 ## Appendix: index and table sizes
 

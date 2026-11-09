@@ -18,10 +18,14 @@ This same case study is used in all five portfolios.
 
 | File | Purpose |
 |---|---|
-| `Akanji_Shakirat_301928526_P1_CarebridgeDesign.dbml` | ER design in DBML, used to draw the diagram on dbdiagram.io |
+| `Akanji_Shakirat_301928526_P1_CarebridgeDesign.dbml` | ER design in DBML, used to draw the diagram on dbdiagram.io [2] |
 | `Akanji_Shakirat_301928526_P1_ERDiagram.png` | Exported ER diagram |
 | `Akanji_Shakirat_301928526_P1_Schema.sql` | PostgreSQL `CREATE TABLE` statements with keys and constraints |
 | `Akanji_Shakirat_301928526_P1_SampleData.sql` | Small hand-written sample data used to test the design |
+| `Akanji_Shakirat_301928526_P1_ConstraintTests.sql` | The five statements that the database must reject (run after the schema and sample data) |
+| `Akanji_Shakirat_301928526_P1_JoinPrescriptions.sql` | A six-table join that finds the patient and doctor behind each prescription |
+| `Akanji_Shakirat_301928526_P1_Normalisation.md` | Worked example: one visit taken through 1NF, 2NF and 3NF |
+| `Akanji_Shakirat_301928526_P1_Evidence.md` | Index of the screenshots, with the rule that rejects each test |
 | `evidence/` | Screenshots of the constraint tests and a join query |
 
 ## 3. ER diagram
@@ -57,7 +61,7 @@ The database has 11 tables:
 
 ## 4. Keys and constraints
 
-Every table has a primary key that is an auto-generated integer (`GENERATED ALWAYS AS IDENTITY`). Foreign keys are declared with `REFERENCES`, so the database rejects links to rows that do not exist.
+Every table has a primary key that is an auto-generated integer (`GENERATED ALWAYS AS IDENTITY`). Foreign keys are declared with `REFERENCES`, so the database rejects links to rows that do not exist [1].
 
 | Rule | Where | Why it exists |
 |---|---|---|
@@ -111,7 +115,7 @@ I loaded the sample data in `Akanji_Shakirat_301928526_P1_SampleData.sql` and th
 | 4 | Insert a payment for visit 999 | foreign key | `evidence/Akanji_Shakirat_301928526_P1_ConstraintPaymentForInvalidVisit.png` |
 | 5 | Delete a patient who has appointments | foreign key | `evidence/Akanji_Shakirat_301928526_P1_ConstraintDeletePatientWithAppointment.png` |
 
-I also ran a join across `prescriptions`, `visits`, `appointments`, `patients`, `doctors` and `drugs` to confirm that the patient and doctor behind a prescription can be found without storing them twice (`evidence/join-prescriptions.png`).
+I also ran a join across `prescriptions`, `visits`, `appointments`, `patients`, `doctors` and `drugs` to confirm that the patient and doctor behind a prescription can be found without storing them twice. The query is in `Akanji_Shakirat_301928526_P1_JoinPrescriptions.sql` and its output is shown in `evidence/Akanji_Shakirat_301928526_P1_JoinPrescriptions.png`.
 
 ## 9. How to run it
 
@@ -148,5 +152,6 @@ A `.env` file with `PG_PASSWORD=<your password>` is needed in the repository roo
 
 ## 12. References
 
-- PostgreSQL 16 documentation, "Constraints": https://www.postgresql.org/docs/16/ddl-constraints.html
-- dbdiagram.io, used to draw the ER diagram from DBML.
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Constraints.* https://www.postgresql.org/docs/16/ddl-constraints.html Accessed 16 October 2026.
+
+[2] dbdiagram.io. Used to draw the ER diagram from DBML. https://dbdiagram.io Accessed 15 October 2026.
