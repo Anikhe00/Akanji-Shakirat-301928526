@@ -88,13 +88,15 @@ What changed in the plans:
 - **After**, Q1, Q2 and Q4 use the new indexes instead of sequential scans on the large tables (see `Akanji_Shakirat_301928526_P2_PlansAfter.txt`).
 - **Q3 and Q5** have the same plan shape before and after.
 
-**Evidence images for Q1.** These three images are *rendered from the saved output files* (`Akanji_Shakirat_301928526_P2_PlansBefore.txt`, `Akanji_Shakirat_301928526_P2_PlansAfter.txt` and `Akanji_Shakirat_301928526_P2_Results.txt`). They are not terminal screenshots, and each image says so. The text files hold the complete output for all five queries.
+**Evidence for Q1 (my own terminal).** These two screenshots are from a re-run on a rebuilt Docker container, taken after a warm-up run. They show the plan change: before the indexes PostgreSQL reads all of `appointments` (`Seq Scan`, `Rows Removed by Filter: 99961`), and after them it uses `Bitmap Index Scan on idx_appointments_patient_start`. The times in the screenshots (11.021 ms before, 1.255 ms after) differ from the table above (12.777 ms and 0.438 ms), which came from my earlier measurement run. Timings vary with the machine and its load, so the plan change is the evidence, not the exact milliseconds.
 
-![Q1 plan before the indexes: Seq Scan on appointments, Execution Time 12.777 ms](evidence/Akanji_Shakirat_301928526_P2_RenderedQ1PlanBeforeIndex.png)
+![Q1 before the indexes: Seq Scan on appointments, Execution Time 11.021 ms](evidence/Akanji_Shakirat_301928526_P2_BeforeIndex.png)
 
-![Q1 plan after the indexes: Bitmap Index Scan, Execution Time 0.438 ms](evidence/Akanji_Shakirat_301928526_P2_RenderedQ1PlanAfterIndex.png)
+![Q1 after the indexes: Bitmap Index Scan, Execution Time 1.255 ms](evidence/Akanji_Shakirat_301928526_P2_AfterIndex.png)
 
-![Q1 query results (first rows)](evidence/Akanji_Shakirat_301928526_P2_RenderedQ1Results.png)
+The image below is *rendered from the saved output file* `Akanji_Shakirat_301928526_P2_Results.txt`. It is not a terminal screenshot. The text files `Akanji_Shakirat_301928526_P2_PlansBefore.txt` and `Akanji_Shakirat_301928526_P2_PlansAfter.txt` hold the complete plans for all five queries.
+
+![Q1 query results (first rows), rendered from the saved file](evidence/Akanji_Shakirat_301928526_P2_RenderedQ1Results.png)
 
 ## 9. Performance analysis
 
