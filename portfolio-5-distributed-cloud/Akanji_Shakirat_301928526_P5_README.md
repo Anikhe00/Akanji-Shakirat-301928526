@@ -139,18 +139,18 @@ Screenshots are from my own terminal and the Atlas dashboard. The full text outp
 
 ## 11. References
 
-[1] PostgreSQL Global Development Group. *PostgreSQL 16: Log-Shipping Standby Servers* (streaming replication). https://www.postgresql.org/docs/16/warm-standby.html
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Log-Shipping Standby Servers* (streaming replication). https://www.postgresql.org/docs/16/warm-standby.html Accessed 8 November 2026.
 
-[2] PostgreSQL Global Development Group. *PostgreSQL 16: pg_basebackup.* https://www.postgresql.org/docs/16/app-pgbasebackup.html
+[2] PostgreSQL Global Development Group. *PostgreSQL 16: pg_basebackup.* https://www.postgresql.org/docs/16/app-pgbasebackup.html Accessed 8 November 2026.
 
-[3] PostgreSQL Global Development Group. *PostgreSQL 16: System Administration Functions* (`pg_wal_replay_pause`, `pg_promote`). https://www.postgresql.org/docs/16/functions-admin.html
+[3] PostgreSQL Global Development Group. *PostgreSQL 16: System Administration Functions* (`pg_wal_replay_pause`, `pg_promote`). https://www.postgresql.org/docs/16/functions-admin.html Accessed 8 November 2026.
 
-[4] MongoDB. *Replication.* https://www.mongodb.com/docs/manual/replication/
+[4] MongoDB. *Replication.* https://www.mongodb.com/docs/manual/replication/ Accessed 8 November 2026.
 
-[5] MongoDB. *Write Concern.* https://www.mongodb.com/docs/manual/reference/write-concern/
+[5] MongoDB. *Write Concern.* https://www.mongodb.com/docs/manual/reference/write-concern/ Accessed 8 November 2026.
 
-[6] MongoDB. *Read Preference.* https://www.mongodb.com/docs/manual/core/read-preference/
+[6] MongoDB. *Read Preference.* https://www.mongodb.com/docs/manual/core/read-preference/ Accessed 8 November 2026.
 
-[7] MongoDB. *Sharding.* https://www.mongodb.com/docs/manual/sharding/
+[7] MongoDB. *Sharding.* https://www.mongodb.com/docs/manual/sharding/ Accessed 8 November 2026.
 
-[8] Brewer, E. (2012). CAP twelve years later: How the "rules" have changed. *IEEE Computer*, 45(2), 23-29.
+[8] Brewer, E. (2012). CAP twelve years later: How the "rules" have changed. *IEEE Computer*, 45(2), 23-29. Accessed 8 November 2026.

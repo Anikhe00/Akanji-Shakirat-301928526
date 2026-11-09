@@ -152,6 +152,6 @@ A `.env` file with `PG_PASSWORD=<your password>` is needed in the repository roo
 
 ## 12. References
 
-[1] PostgreSQL Global Development Group. *PostgreSQL 16: Constraints.* https://www.postgresql.org/docs/16/ddl-constraints.html
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Constraints.* https://www.postgresql.org/docs/16/ddl-constraints.html Accessed 16 October 2026.
 
-[2] dbdiagram.io. Used to draw the ER diagram from DBML. https://dbdiagram.io
+[2] dbdiagram.io. Used to draw the ER diagram from DBML. https://dbdiagram.io Accessed 15 October 2026.

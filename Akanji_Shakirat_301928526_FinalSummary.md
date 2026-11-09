@@ -57,22 +57,22 @@ Claude (Anthropic), via Claude Code and the Claude app, was used to propose the 
 
 ## 6. References
 
-[1] PostgreSQL Global Development Group. *PostgreSQL 16: Constraints.* https://www.postgresql.org/docs/16/ddl-constraints.html
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Constraints.* https://www.postgresql.org/docs/16/ddl-constraints.html Accessed 16 October 2026.
 
-[2] PostgreSQL Global Development Group. *PostgreSQL 16: Using EXPLAIN.* https://www.postgresql.org/docs/16/using-explain.html
+[2] PostgreSQL Global Development Group. *PostgreSQL 16: Using EXPLAIN.* https://www.postgresql.org/docs/16/using-explain.html Accessed 24 October 2026.
 
-[3] PostgreSQL Global Development Group. *PostgreSQL 16: Transaction Isolation.* https://www.postgresql.org/docs/16/transaction-iso.html
+[3] PostgreSQL Global Development Group. *PostgreSQL 16: Transaction Isolation.* https://www.postgresql.org/docs/16/transaction-iso.html Accessed 8 November 2026.
 
-[4] PostgreSQL Global Development Group. *PostgreSQL 16: Explicit Locking.* https://www.postgresql.org/docs/16/explicit-locking.html
+[4] PostgreSQL Global Development Group. *PostgreSQL 16: Explicit Locking.* https://www.postgresql.org/docs/16/explicit-locking.html Accessed 8 November 2026.
 
-[5] MongoDB. *Data Modeling.* https://www.mongodb.com/docs/manual/data-modeling/
+[5] MongoDB. *Data Modeling.* https://www.mongodb.com/docs/manual/data-modeling/ Accessed 8 November 2026.
 
-[6] PostgreSQL Global Development Group. *PostgreSQL 16: Log-Shipping Standby Servers (Streaming Replication).* https://www.postgresql.org/docs/16/warm-standby.html
+[6] PostgreSQL Global Development Group. *PostgreSQL 16: Log-Shipping Standby Servers (Streaming Replication).* https://www.postgresql.org/docs/16/warm-standby.html Accessed 8 November 2026.
 
-[7] MongoDB. *Replication.* https://www.mongodb.com/docs/manual/replication/
+[7] MongoDB. *Replication.* https://www.mongodb.com/docs/manual/replication/ Accessed 8 November 2026.
 
-[8] MongoDB. *Sharding.* https://www.mongodb.com/docs/manual/sharding/
+[8] MongoDB. *Sharding.* https://www.mongodb.com/docs/manual/sharding/ Accessed 8 November 2026.
 
-[9] Brewer, E. (2012). CAP twelve years later: How the "rules" have changed. *IEEE Computer*, 45(2), 23-29.
+[9] Brewer, E. (2012). CAP twelve years later: How the "rules" have changed. *IEEE Computer*, 45(2), 23-29. Accessed 8 November 2026.
 
 Per-portfolio reference lists are in each folder's README. All clinic data is simulated.

@@ -148,13 +148,13 @@ Add the indexes and run the queries again, twice:
 
 ## 13. References
 
-[1] PostgreSQL Global Development Group. *PostgreSQL 16: Using EXPLAIN.* https://www.postgresql.org/docs/16/using-explain.html
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Using EXPLAIN.* https://www.postgresql.org/docs/16/using-explain.html Accessed 24 October 2026.
 
-[2] PostgreSQL Global Development Group. *PostgreSQL 16: EXPLAIN.* https://www.postgresql.org/docs/16/sql-explain.html
+[2] PostgreSQL Global Development Group. *PostgreSQL 16: EXPLAIN.* https://www.postgresql.org/docs/16/sql-explain.html Accessed 24 October 2026.
 
-[3] PostgreSQL Global Development Group. *PostgreSQL 16: Indexes.* https://www.postgresql.org/docs/16/indexes.html
+[3] PostgreSQL Global Development Group. *PostgreSQL 16: Indexes.* https://www.postgresql.org/docs/16/indexes.html Accessed 24 October 2026.
 
-[4] PostgreSQL Global Development Group. *PostgreSQL 16: Partial Indexes.* https://www.postgresql.org/docs/16/indexes-partial.html
+[4] PostgreSQL Global Development Group. *PostgreSQL 16: Partial Indexes.* https://www.postgresql.org/docs/16/indexes-partial.html Accessed 24 October 2026.
 
 ## Appendix: index and table sizes
 

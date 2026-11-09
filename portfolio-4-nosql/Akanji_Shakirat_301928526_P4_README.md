@@ -140,10 +140,10 @@ I chose the document type for the implementation because patient records are the
 
 ## 11. References
 
-[1] MongoDB. *Data Modeling* (embedded and referenced documents). https://www.mongodb.com/docs/manual/data-modeling/
+[1] MongoDB. *Data Modeling* (embedded and referenced documents). https://www.mongodb.com/docs/manual/data-modeling/ Accessed 8 November 2026.
 
-[2] MongoDB. *Aggregation Pipeline* (`$unwind`, `$group`, `$project`). https://www.mongodb.com/docs/manual/core/aggregation-pipeline/
+[2] MongoDB. *Aggregation Pipeline* (`$unwind`, `$group`, `$project`). https://www.mongodb.com/docs/manual/core/aggregation-pipeline/ Accessed 8 November 2026.
 
-[3] MongoDB. *Multikey Indexes.* https://www.mongodb.com/docs/manual/core/indexes/index-types/index-multikey/
+[3] MongoDB. *Multikey Indexes.* https://www.mongodb.com/docs/manual/core/indexes/index-types/index-multikey/ Accessed 8 November 2026.
 
-[4] MongoDB. *Limits and Thresholds* (16 MB document size). https://www.mongodb.com/docs/manual/reference/limits/
+[4] MongoDB. *Limits and Thresholds* (16 MB document size). https://www.mongodb.com/docs/manual/reference/limits/ Accessed 8 November 2026.

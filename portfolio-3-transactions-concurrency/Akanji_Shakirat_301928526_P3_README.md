@@ -138,8 +138,8 @@ Evidence: Demo 4 in `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt`.
 
 ## 11. References
 
-[1] PostgreSQL Global Development Group. *PostgreSQL 16: Transaction Isolation.* https://www.postgresql.org/docs/16/transaction-iso.html
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Transaction Isolation.* https://www.postgresql.org/docs/16/transaction-iso.html Accessed 8 November 2026.
 
-[2] PostgreSQL Global Development Group. *PostgreSQL 16: Explicit Locking* (`SELECT ... FOR UPDATE`). https://www.postgresql.org/docs/16/explicit-locking.html
+[2] PostgreSQL Global Development Group. *PostgreSQL 16: Explicit Locking* (`SELECT ... FOR UPDATE`). https://www.postgresql.org/docs/16/explicit-locking.html Accessed 8 November 2026.
 
-[3] PostgreSQL Global Development Group. *PostgreSQL 16: Constraints* (unique constraints). https://www.postgresql.org/docs/16/ddl-constraints.html
+[3] PostgreSQL Global Development Group. *PostgreSQL 16: Constraints* (unique constraints). https://www.postgresql.org/docs/16/ddl-constraints.html Accessed 8 November 2026.
