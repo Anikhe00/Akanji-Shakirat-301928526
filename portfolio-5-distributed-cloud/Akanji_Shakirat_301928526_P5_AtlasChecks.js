@@ -1,5 +1,5 @@
 // Portfolio 5: checks against the MongoDB Atlas cluster (a managed replica set).
-// Run by atlas_demo.sh through mongosh.
+// Run by Akanji_Shakirat_301928526_P5_AtlasDemo.sh through mongosh.
 
 const cb = db.getSiblingDB("carebridge");
 

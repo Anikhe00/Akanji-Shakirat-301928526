@@ -19,24 +19,24 @@ Sharding is covered as a written design discussion (section 6).
 | File | Purpose |
 |---|---|
 | `docker-compose.replication.yml` | Starts a PostgreSQL primary and a replica (separate from the main `docker-compose.yml`) |
-| `init-primary.sql` | Runs once on the primary: creates the replication user and allows it to connect |
-| `replication_demo.sh` | Runs the five replication demos |
-| `replication_output.txt` | Captured output of the replication demo |
-| `atlas_demo.sh` | Imports the patient documents into Atlas and runs the checks |
-| `atlas_checks.js` | The `mongosh` checks run against Atlas |
-| `atlas_output.txt` | Captured output of the Atlas run (connection string and password hidden) |
+| `Akanji_Shakirat_301928526_P5_InitPrimary.sql` | Runs once on the primary: creates the replication user and allows it to connect |
+| `Akanji_Shakirat_301928526_P5_ReplicationDemo.sh` | Runs the five replication demos |
+| `Akanji_Shakirat_301928526_P5_ReplicationOutput.txt` | Captured output of the replication demo |
+| `Akanji_Shakirat_301928526_P5_AtlasDemo.sh` | Imports the patient documents into Atlas and runs the checks |
+| `Akanji_Shakirat_301928526_P5_AtlasChecks.js` | The `mongosh` checks run against Atlas |
+| `Akanji_Shakirat_301928526_P5_AtlasOutput.txt` | Captured output of the Atlas run (connection string and password hidden) |
 | `evidence/` | Terminal and Atlas dashboard screenshots |
 
 ## 3. How to run
 
 **PostgreSQL replication** (about 1 to 2 minutes; recreates both containers every run):
 ```bash
-bash portfolio-5-distributed-cloud/replication_demo.sh 2>&1 | tee portfolio-5-distributed-cloud/replication_output.txt
+bash portfolio-5-distributed-cloud/Akanji_Shakirat_301928526_P5_ReplicationDemo.sh 2>&1 | tee portfolio-5-distributed-cloud/Akanji_Shakirat_301928526_P5_ReplicationOutput.txt
 ```
 
 **MongoDB Atlas** (needs a free Atlas cluster, a database user, and an IP access list entry; the script asks for the connection string and hides it, so it is never saved):
 ```bash
-bash portfolio-5-distributed-cloud/atlas_demo.sh 2>&1 | tee portfolio-5-distributed-cloud/atlas_output.txt
+bash portfolio-5-distributed-cloud/Akanji_Shakirat_301928526_P5_AtlasDemo.sh 2>&1 | tee portfolio-5-distributed-cloud/Akanji_Shakirat_301928526_P5_AtlasOutput.txt
 ```
 
 ## 4. PostgreSQL primary-replica replication
@@ -108,19 +108,19 @@ The CAP idea says that when a network failure splits a distributed system, it mu
 
 ## 8. Evidence
 
-Screenshots are from my own terminal and the Atlas dashboard. The full text output is in `replication_output.txt` and `atlas_output.txt`.
+Screenshots are from my own terminal and the Atlas dashboard. The full text output is in `Akanji_Shakirat_301928526_P5_ReplicationOutput.txt` and `Akanji_Shakirat_301928526_P5_AtlasOutput.txt`.
 
 **Replication starts and the roles are correct** (primary and replica streaming, schema received)
-![Replication setup](evidence/p5_01_replication_setup.png)
+![Replication setup](evidence/Akanji_Shakirat_301928526_P5_ReplicationSetup.png)
 
 **Replication lag, then failover** (stale read of 10, caught up to 8, replica promoted)
-![Replication lag and failover](evidence/p5_02_replication_lag_failover.png)
+![Replication lag and failover](evidence/Akanji_Shakirat_301928526_P5_ReplicationLagFailover.png)
 
 **Atlas import and replica set checks** (3 members, majority write, secondary read)
-![Atlas import and checks](evidence/p5_03_atlas_import_checks.png)
+![Atlas import and checks](evidence/Akanji_Shakirat_301928526_P5_AtlasImportChecks.png)
 
 **Atlas dashboard** (the running cluster)
-![Atlas cluster](evidence/p5_04_atlas_cluster.png)
+![Atlas cluster](evidence/Akanji_Shakirat_301928526_P5_AtlasCluster.png)
 
 ## 9. Limitations
 

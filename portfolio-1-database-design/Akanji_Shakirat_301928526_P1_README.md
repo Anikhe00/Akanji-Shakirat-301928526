@@ -18,15 +18,15 @@ This same case study is used in all five portfolios.
 
 | File | Purpose |
 |---|---|
-| `carebridge.dbml` | ER design in DBML, used to draw the diagram on dbdiagram.io |
-| `er-diagram.png` | Exported ER diagram |
-| `schema.sql` | PostgreSQL `CREATE TABLE` statements with keys and constraints |
-| `seed_sample.sql` | Small hand-written sample data used to test the design |
+| `Akanji_Shakirat_301928526_P1_CarebridgeDesign.dbml` | ER design in DBML, used to draw the diagram on dbdiagram.io |
+| `Akanji_Shakirat_301928526_P1_ERDiagram.png` | Exported ER diagram |
+| `Akanji_Shakirat_301928526_P1_Schema.sql` | PostgreSQL `CREATE TABLE` statements with keys and constraints |
+| `Akanji_Shakirat_301928526_P1_SampleData.sql` | Small hand-written sample data used to test the design |
 | `evidence/` | Screenshots of the constraint tests and a join query |
 
 ## 3. ER diagram
 
-![ER diagram](er-diagram.png)
+![ER diagram](Akanji_Shakirat_301928526_P1_ERDiagram.png)
 
 The database has 11 tables:
 
@@ -101,15 +101,15 @@ I did not use `ON DELETE CASCADE`, because it would silently delete the patient'
 
 ## 8. Testing and evidence
 
-I loaded the sample data in `seed_sample.sql` and then tried to break the rules. All five attempts were rejected by the database:
+I loaded the sample data in `Akanji_Shakirat_301928526_P1_SampleData.sql` and then tried to break the rules. All five attempts were rejected by the database:
 
 | # | Attempt | Rejected by | Evidence file |
 |---|---|---|---|
-| 1 | Book Dr Okafor twice at 09:00 | unique constraint | `evidence/constraint-double-booking.png` |
-| 2 | Insert a patient with sex = "unknown" | check constraint | `evidence/constraint-invalid-sex.png` |
-| 3 | Set drug stock to -5 | check constraint | `evidence/constraint-negative-stock.png` |
-| 4 | Insert a payment for visit 999 | foreign key | `evidence/constraint-missing-visit.png` |
-| 5 | Delete a patient who has appointments | foreign key | `evidence/constraint-delete-patient.png` |
+| 1 | Book Dr Okafor twice at 09:00 | unique constraint | `evidence/Akanji_Shakirat_301928526_P1_ConstraintDoubleBooking.png` |
+| 2 | Insert a patient with sex = "unknown" | check constraint | `evidence/Akanji_Shakirat_301928526_P1_ConstraintWrongSexValue.png` |
+| 3 | Set drug stock to -5 | check constraint | `evidence/Akanji_Shakirat_301928526_P1_ConstraintNegativeDrugStock.png` |
+| 4 | Insert a payment for visit 999 | foreign key | `evidence/Akanji_Shakirat_301928526_P1_ConstraintPaymentForInvalidVisit.png` |
+| 5 | Delete a patient who has appointments | foreign key | `evidence/Akanji_Shakirat_301928526_P1_ConstraintDeletePatientWithAppointment.png` |
 
 I also ran a join across `prescriptions`, `visits`, `appointments`, `patients`, `doctors` and `drugs` to confirm that the patient and doctor behind a prescription can be found without storing them twice (`evidence/join-prescriptions.png`).
 
@@ -121,11 +121,11 @@ From the repository root, start the databases:
 
 Create the tables:
 
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-1-database-design/schema.sql
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-1-database-design/Akanji_Shakirat_301928526_P1_Schema.sql
 
 Load the sample data (run once):
 
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-1-database-design/seed_sample.sql
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-1-database-design/Akanji_Shakirat_301928526_P1_SampleData.sql
 
 Check the tables:
 

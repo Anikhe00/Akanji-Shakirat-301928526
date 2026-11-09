@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Portfolio 5: PostgreSQL primary-replica replication, replication lag, and failover.
 # Run from the repo root:
-#   bash portfolio-5-distributed-cloud/replication_demo.sh 2>&1 | tee portfolio-5-distributed-cloud/replication_output.txt
+#   bash portfolio-5-distributed-cloud/Akanji_Shakirat_301928526_P5_ReplicationDemo.sh 2>&1 | tee portfolio-5-distributed-cloud/Akanji_Shakirat_301928526_P5_ReplicationOutput.txt
 # Every run starts from a clean slate (it deletes and recreates both containers).
 
 cd "$(dirname "$0")"
@@ -10,7 +10,7 @@ COMPOSE=${COMPOSE:-"docker compose -f docker-compose.replication.yml --env-file 
 P=${P:-"docker exec -i carebridge-pg-primary psql -U carebridge -d carebridge"}
 R=${R:-"docker exec -i carebridge-pg-replica psql -U carebridge -d carebridge"}
 STOP_PRIMARY=${STOP_PRIMARY:-"docker stop carebridge-pg-primary"}
-SCHEMA=${SCHEMA:-"../portfolio-1-database-design/schema.sql"}
+SCHEMA=${SCHEMA:-"../portfolio-1-database-design/Akanji_Shakirat_301928526_P1_Schema.sql"}
 
 section() { echo; echo "=============================================================="; echo "$1"; echo "=============================================================="; }
 stock() { $1 -At -c "SELECT '$2: stock of the demo drug = ' || stock_quantity FROM drugs WHERE name = 'Replication Demo Drug'"; }

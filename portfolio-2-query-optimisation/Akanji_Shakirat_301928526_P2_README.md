@@ -12,18 +12,18 @@ PostgreSQL 16 running in Docker (`docker-compose.yml` in the repository root) on
 
 | File | Purpose |
 |---|---|
-| `seed_bulk.sql` | Generates the test data (it empties all tables first) |
-| `explain_queries.sql` | The five queries, each run with `EXPLAIN (ANALYZE)` |
-| `plans_before.txt` | Execution plans before adding indexes |
-| `indexes.sql` | The four indexes I added |
-| `plans_after.txt` | Execution plans after adding indexes |
-| `queries.sql` | The same five queries without `EXPLAIN`, to show real results |
-| `results.txt` | The actual query results |
-| `index_sizes.txt` | Disk size of the new indexes |
+| `Akanji_Shakirat_301928526_P2_SeedBulk.sql` | Generates the test data (it empties all tables first) |
+| `Akanji_Shakirat_301928526_P2_ExplainQueries.sql` | The five queries, each run with `EXPLAIN (ANALYZE)` |
+| `Akanji_Shakirat_301928526_P2_PlansBefore.txt` | Execution plans before adding indexes |
+| `Akanji_Shakirat_301928526_P2_Indexes.sql` | The four indexes I added |
+| `Akanji_Shakirat_301928526_P2_PlansAfter.txt` | Execution plans after adding indexes |
+| `Akanji_Shakirat_301928526_P2_Queries.sql` | The same five queries without `EXPLAIN`, to show real results |
+| `Akanji_Shakirat_301928526_P2_Results.txt` | The actual query results |
+| `Akanji_Shakirat_301928526_P2_IndexSizes.txt` | Disk size of the new indexes |
 
 ## 4. Test data
 
-`seed_bulk.sql` creates the data with SQL only (`generate_series` and random choices). `setseed(0.42)` makes the random numbers repeatable. All data is invented.
+`Akanji_Shakirat_301928526_P2_SeedBulk.sql` creates the data with SQL only (`generate_series` and random choices). `setseed(0.42)` makes the random numbers repeatable. All data is invented.
 
 | Table | Rows |
 |---|---|
@@ -40,9 +40,9 @@ Patient ids are skewed on purpose, so some patients visit far more often than ot
 
 ## 5. Method
 
-1. Run `explain_queries.sql` before any new index exists.
+1. Run `Akanji_Shakirat_301928526_P2_ExplainQueries.sql` before any new index exists.
 2. Each file is run **twice**. The first run only fills PostgreSQL's memory cache, so I keep the second run.
-3. Create the indexes in `indexes.sql`, then run `ANALYZE` so the planner has fresh statistics.
+3. Create the indexes in `Akanji_Shakirat_301928526_P2_Indexes.sql`, then run `ANALYZE` so the planner has fresh statistics.
 4. Run the same file again, twice, and keep the second run.
 5. Compare the `Execution Time` and the shape of each plan.
 
@@ -85,7 +85,7 @@ What changed in the plans:
 
 - **Before, Q1** read all 100,000 rows of `appointments` (`Rows Removed by Filter: 99961`, to return 39 rows) and all 95,651 rows of `diagnoses`.
 - **Before, Q2** read all 100,000 appointments and discarded 94,230 (`Rows Removed by Filter: 94230`).
-- **After**, Q1, Q2 and Q4 use the new indexes instead of sequential scans on the large tables (see `plans_after.txt`).
+- **After**, Q1, Q2 and Q4 use the new indexes instead of sequential scans on the large tables (see `Akanji_Shakirat_301928526_P2_PlansAfter.txt`).
 - **Q3 and Q5** have the same plan shape before and after.
 
 ## 9. Performance analysis
@@ -116,25 +116,25 @@ What changed in the plans:
 Start the databases and load the data:
 
     docker compose up -d
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-1-database-design/schema.sql
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/seed_bulk.sql
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-1-database-design/Akanji_Shakirat_301928526_P1_Schema.sql
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/Akanji_Shakirat_301928526_P2_SeedBulk.sql
 
-(Skip the `schema.sql` line if the tables already exist.) Run the queries before indexing, twice:
+(Skip the `Akanji_Shakirat_301928526_P1_Schema.sql` line if the tables already exist.) Run the queries before indexing, twice:
 
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/explain_queries.sql > /dev/null
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/explain_queries.sql
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/Akanji_Shakirat_301928526_P2_ExplainQueries.sql > /dev/null
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/Akanji_Shakirat_301928526_P2_ExplainQueries.sql
 
 Add the indexes and run the queries again, twice:
 
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/indexes.sql
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/explain_queries.sql > /dev/null
-    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/explain_queries.sql
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/Akanji_Shakirat_301928526_P2_Indexes.sql
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/Akanji_Shakirat_301928526_P2_ExplainQueries.sql > /dev/null
+    docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/Akanji_Shakirat_301928526_P2_ExplainQueries.sql
 
 ## 12. AI use declaration (Portfolio 2)
 
 - **Tool used:** Claude (Anthropic).
-- **Used for:** explaining how to read `EXPLAIN ANALYZE` output, drafting the data generator (`seed_bulk.sql`), suggesting the five queries and the four indexes, and drafting this README.
-- **How I reviewed and verified it:** I ran the data generator and checked the row counts myself, ran every query before and after adding the indexes in my own Docker PostgreSQL, compared the plans and timings, and checked the claims in this README against `plans_before.txt` and `plans_after.txt`. I can explain why each index helped or did not help.
+- **Used for:** explaining how to read `EXPLAIN ANALYZE` output, drafting the data generator (`Akanji_Shakirat_301928526_P2_SeedBulk.sql`), suggesting the five queries and the four indexes, and drafting this README.
+- **How I reviewed and verified it:** I ran the data generator and checked the row counts myself, ran every query before and after adding the indexes in my own Docker PostgreSQL, compared the plans and timings, and checked the claims in this README against `Akanji_Shakirat_301928526_P2_PlansBefore.txt` and `Akanji_Shakirat_301928526_P2_PlansAfter.txt`. I can explain why each index helped or did not help.
 
 ## 13. References
 

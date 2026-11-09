@@ -12,20 +12,20 @@ In Portfolio 1 the CareBridge data was split across 11 tables. To read one patie
 
 | File | Purpose |
 |---|---|
-| `export_patients.sql` | Reads the PostgreSQL data and builds one JSON document per patient (first 200 patients) |
-| `patients.jsonl` | The exported documents, one per line |
-| `queries.js` | Eight MongoDB queries (mongosh) |
-| `run_nosql_demo.sh` | Runs export, import and queries in one command |
-| `nosql_output.txt` | Captured output of the run |
+| `Akanji_Shakirat_301928526_P4_ExportPatients.sql` | Reads the PostgreSQL data and builds one JSON document per patient (first 200 patients) |
+| `Akanji_Shakirat_301928526_P4_Patients.jsonl` | The exported documents, one per line |
+| `Akanji_Shakirat_301928526_P4_Queries.js` | Eight MongoDB queries (mongosh) |
+| `Akanji_Shakirat_301928526_P4_RunNosqlDemo.sh` | Runs export, import and queries in one command |
+| `Akanji_Shakirat_301928526_P4_NosqlOutput.txt` | Captured output of the run |
 
 ## 3. How to run
 
 ```bash
 docker compose up -d
-bash portfolio-4-nosql/run_nosql_demo.sh 2>&1 | tee portfolio-4-nosql/nosql_output.txt
+bash portfolio-4-nosql/Akanji_Shakirat_301928526_P4_RunNosqlDemo.sh 2>&1 | tee portfolio-4-nosql/Akanji_Shakirat_301928526_P4_NosqlOutput.txt
 ```
 
-The script (1) exports the patient documents from PostgreSQL, (2) imports them with `mongoimport --drop` into `carebridge.patients`, and (3) runs `queries.js` with `mongosh`. Re-running it resets the data, because of `--drop`.
+The script (1) exports the patient documents from PostgreSQL, (2) imports them with `mongoimport --drop` into `carebridge.patients`, and (3) runs `Akanji_Shakirat_301928526_P4_Queries.js` with `mongosh`. Re-running it resets the data, because of `--drop`.
 
 ## 4. The document model
 
@@ -54,7 +54,7 @@ Dates are stored as real MongoDB dates (the export uses extended JSON `{"$date":
 
 ## 5. Results
 
-All output is in `nosql_output.txt`.
+All output is in `Akanji_Shakirat_301928526_P4_NosqlOutput.txt`.
 
 **Query 1: import check.** 200 patient documents, 0 failed.
 
@@ -81,22 +81,22 @@ This is the same idea as Portfolio 2: a collection scan reads everything, an ind
 
 ## 6. Evidence
 
-These screenshots are from my own terminal, taken while I ran the demo. The full text output is also saved in `nosql_output.txt`. Screenshots are in the `evidence/` folder.
+These screenshots are from my own terminal, taken while I ran the demo. The full text output is also saved in `Akanji_Shakirat_301928526_P4_NosqlOutput.txt`. Screenshots are in the `evidence/` folder.
 
 **Both containers running** (`docker ps`: `carebridge-pg` and `carebridge-mongo`)
-![Docker containers running](evidence/p4_00_containers_running.png)
+![Docker containers running](evidence/Akanji_Shakirat_301928526_P4_ContainersRunning.png)
 
 **Export from PostgreSQL, import into MongoDB (200 imported, 0 failed), and Queries 1 and 2** (document count, one patient's whole record)
-![Export, import and queries 1 and 2](evidence/p4_01_export_import_q1_q2.png)
+![Export, import and queries 1 and 2](evidence/Akanji_Shakirat_301928526_P4_ExportImportQ1Q2.png)
 
 **Query 2 (embedded visit) and Query 3** (everything patient 100 was prescribed)
-![Queries 2 and 3](evidence/p4_02_q2_q3.png)
+![Queries 2 and 3](evidence/Akanji_Shakirat_301928526_P4_Q2Q3.png)
 
 **Queries 4 and 5** (most common diagnoses, top payers)
-![Queries 4 and 5](evidence/p4_03_q4_q5.png)
+![Queries 4 and 5](evidence/Akanji_Shakirat_301928526_P4_Q4Q5.png)
 
 **Queries 6, 7 and 8** (flexible schema, `COLLSCAN` vs `IXSCAN`, document size)
-![Queries 6, 7 and 8](evidence/p4_04_q6_q7_q8.png)
+![Queries 6, 7 and 8](evidence/Akanji_Shakirat_301928526_P4_Q6Q7Q8.png)
 
 ## 7. Why a document database suits this data (and where it does not)
 
