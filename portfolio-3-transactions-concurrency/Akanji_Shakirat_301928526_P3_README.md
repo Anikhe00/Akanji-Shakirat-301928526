@@ -26,6 +26,8 @@ All demos use one test drug, **Demo Artesunate** (stock 10), created by `Akanji_
 | `Akanji_Shakirat_301928526_P3_Demo1Output.txt` | Captured output of Demo 1 |
 | `Akanji_Shakirat_301928526_P3_DemoConcurrency.sh` | Runs Demos 2 to 4: opens two database sessions (A and B) at the same time and prints a timestamped timeline |
 | `Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt` | Captured output of Demos 2 to 4 |
+| `Akanji_Shakirat_301928526_P3_SessionA.sql` | Session A steps for running Demo 2 (fix) and Demo 4 by hand in one terminal |
+| `Akanji_Shakirat_301928526_P3_SessionB.sql` | Session B steps for the second terminal. Run the numbered steps alternately: A, B, A, B |
 | `evidence/` | Optional screenshots of the terminal output |
 
 ## 3. How to run
@@ -41,6 +43,8 @@ Demos 2 to 4 need two database sessions running at the same time. `Akanji_Shakir
 ```bash
 bash portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_DemoConcurrency.sh 2>&1 | tee portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_DemoConcurrencyOutput.txt
 ```
+
+To run Demo 2 (the `FOR UPDATE` fix) and Demo 4 by hand, open two `psql` terminals and follow the numbered steps in `Akanji_Shakirat_301928526_P3_SessionA.sql` and `Akanji_Shakirat_301928526_P3_SessionB.sql`, alternating A, B, A, B. Do not run the two files one after the other, because the demonstration needs the sessions to overlap.
 
 Every output line starts with the time, so the output reads as a timeline. The results are described in sections 5 to 7 below.
 

@@ -22,6 +22,9 @@ This same case study is used in all five portfolios.
 | `Akanji_Shakirat_301928526_P1_ERDiagram.png` | Exported ER diagram |
 | `Akanji_Shakirat_301928526_P1_Schema.sql` | PostgreSQL `CREATE TABLE` statements with keys and constraints |
 | `Akanji_Shakirat_301928526_P1_SampleData.sql` | Small hand-written sample data used to test the design |
+| `Akanji_Shakirat_301928526_P1_ConstraintTests.sql` | The five statements that the database must reject (run after the schema and sample data) |
+| `Akanji_Shakirat_301928526_P1_Normalisation.md` | Worked example: one visit taken through 1NF, 2NF and 3NF |
+| `Akanji_Shakirat_301928526_P1_Evidence.md` | Index of the screenshots, with the rule that rejects each test |
 | `evidence/` | Screenshots of the constraint tests and a join query |
 
 ## 3. ER diagram
