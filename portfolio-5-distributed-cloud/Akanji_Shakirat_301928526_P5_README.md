@@ -42,7 +42,7 @@ bash portfolio-5-distributed-cloud/Akanji_Shakirat_301928526_P5_AtlasDemo.sh 2>&
 ## 4. PostgreSQL primary-replica replication
 
 ### Setup
-Two containers run PostgreSQL 16. The **primary** (`carebridge-pg-primary`) accepts reads and writes. The **replica** (`carebridge-pg-replica`) is created by `pg_basebackup`, which copies the primary's data and marks the new server as a standby. It then **streams** the primary's write-ahead log (WAL) continuously and replays it. The replication is **asynchronous**: the primary confirms a write without waiting for the replica.
+Two containers run PostgreSQL 16 with streaming replication [1]. The **primary** (`carebridge-pg-primary`) accepts reads and writes. The **replica** (`carebridge-pg-replica`) is created by `pg_basebackup` [2], which copies the primary's data and marks the new server as a standby. It then **streams** the primary's write-ahead log (WAL) continuously and replays it. The replication is **asynchronous**: the primary confirms a write without waiting for the replica.
 
 ### Results
 
@@ -51,8 +51,8 @@ Two containers run PostgreSQL 16. The **primary** (`carebridge-pg-primary`) acce
 | 1 | Roles | Primary: `pg_is_in_recovery = false`. Replica: `pg_is_in_recovery = true` (a standby) |
 | 2 | Data copied | The Portfolio 1 schema was loaded on the primary only. The replica received all 11 tables and the demo drug row (stock 10) |
 | 3 | Replica is read-only | `UPDATE` on the replica failed: `ERROR: cannot execute UPDATE in a read-only transaction` |
-| 4 | Replication lag | With replay paused on the replica, the primary changed stock 10 to 8. The primary showed **8**, the paused replica still showed **10** (stale), and the primary reported the replica **112 bytes behind**. After resuming, the replica showed **8** and was **0 bytes behind** |
-| 5 | Failover | The primary was stopped and the replica was promoted with `pg_promote()`. It reported `pg_is_in_recovery = false`, accepted a write, and the stock read **5** |
+| 4 | Replication lag | With replay paused on the replica [3], the primary changed stock 10 to 8. The primary showed **8**, the paused replica still showed **10** (stale), and the primary reported the replica **112 bytes behind**. After resuming, the replica showed **8** and was **0 bytes behind** |
+| 5 | Failover | The primary was stopped and the replica was promoted with `pg_promote()` [3]. It reported `pg_is_in_recovery = false`, accepted a write, and the stock read **5** |
 
 ### What this means for CareBridge
 - **Read scaling and backup copy.** Reports and dashboards can read from the replica, so they do not slow down the primary that clinic staff write to.
@@ -71,17 +71,17 @@ I created a free (M0) cluster on MongoDB Atlas, a database user, and an IP acces
 | 1 | Replica set | Name `atlas-g086eg-shard-0`, **3 members** seen, one current primary |
 | 2 | Member roles | `rs.status()` worked: 2 members `SECONDARY` and 1 `PRIMARY` |
 | 3 | Data | 200 patient documents in the cloud collection |
-| 4 | Majority write | `updateOne` with write concern `w: "majority"` returned `acknowledged: true`, `modifiedCount: 1`. The write was confirmed only after most nodes had it |
-| 5 | Read preference | A read with preference `primary` was served by the primary node. A read with preference `secondary` was served by a **different** node, and it already returned the field written in check 4 |
+| 4 | Majority write | `updateOne` with write concern `w: "majority"` [5] returned `acknowledged: true`, `modifiedCount: 1`. The write was confirmed only after most nodes had it |
+| 5 | Read preference | A read with preference `primary` [6] was served by the primary node. A read with preference `secondary` was served by a **different** node, and it already returned the field written in check 4 |
 
 ### What this means for CareBridge
-- **Availability.** With 3 nodes, the cluster keeps working if one node fails, because the remaining two are still a majority and can elect a new primary. I did not trigger a failover on Atlas, so this is how the design works, not something I measured.
+- **Availability.** With 3 nodes, the cluster keeps working if one node fails, because the remaining two are still a majority and can elect a new primary [4]. I did not trigger a failover on Atlas, so this is how the design works, not something I measured.
 - **Consistency is a setting.** Writing with `w: "majority"` and reading from the primary gives the strongest guarantee. Reading from a secondary spreads load but can return slightly older data, the same trade-off as the PostgreSQL replica in section 4. In my test the secondary already had the new value, because the replication was fast.
 - **Managed service.** Atlas runs the nodes, networking and failover for me. In exchange, data lives on the provider's servers in a region I chose. For real patient data, the region and the Nigeria Data Protection Act would have to be considered.
 
 ## 6. Sharding (design discussion, not implemented)
 
-**Replication copies the same data to every node. Sharding splits the data so each node holds only part of it.** It is used when the data or the write load is too big for one machine. I did not implement it: CareBridge's data is small, and my Atlas cluster is a single replica set.
+**Replication copies the same data to every node. Sharding splits the data so each node holds only part of it.** [7] It is used when the data or the write load is too big for one machine. I did not implement it: CareBridge's data is small, and my Atlas cluster is a single replica set.
 
 If CareBridge grew to many clinics, a good design would be:
 
@@ -95,7 +95,7 @@ If CareBridge grew to many clinics, a good design would be:
 
 ## 7. Availability, consistency and the CAP trade-off
 
-The CAP idea says that when a network failure splits a distributed system, it must choose between **consistency** (every read sees the latest write) and **availability** (every request gets an answer).
+The CAP idea [8] says that when a network failure splits a distributed system, it must choose between **consistency** (every read sees the latest write) and **availability** (every request gets an answer).
 
 | System | Behaviour | Choice |
 |---|---|---|
@@ -139,10 +139,18 @@ Screenshots are from my own terminal and the Atlas dashboard. The full text outp
 
 ## 11. References
 
-- PostgreSQL Documentation, *Log-Shipping Standby Servers and Streaming Replication*: https://www.postgresql.org/docs/16/warm-standby.html
-- PostgreSQL Documentation, *pg_basebackup*: https://www.postgresql.org/docs/16/app-pgbasebackup.html
-- PostgreSQL Documentation, *Recovery control functions (`pg_wal_replay_pause`, `pg_promote`)*: https://www.postgresql.org/docs/16/functions-admin.html
-- MongoDB Manual, *Replication*: https://www.mongodb.com/docs/manual/replication/
-- MongoDB Manual, *Write Concern* and *Read Preference*: https://www.mongodb.com/docs/manual/reference/write-concern/ and https://www.mongodb.com/docs/manual/core/read-preference/
-- MongoDB Manual, *Sharding*: https://www.mongodb.com/docs/manual/sharding/
-- Brewer, E. (2012). *CAP twelve years later: How the "rules" have changed.* IEEE Computer, 45(2), 23-29.
+[1] PostgreSQL Global Development Group. *PostgreSQL 16: Log-Shipping Standby Servers* (streaming replication). https://www.postgresql.org/docs/16/warm-standby.html
+
+[2] PostgreSQL Global Development Group. *PostgreSQL 16: pg_basebackup.* https://www.postgresql.org/docs/16/app-pgbasebackup.html
+
+[3] PostgreSQL Global Development Group. *PostgreSQL 16: System Administration Functions* (`pg_wal_replay_pause`, `pg_promote`). https://www.postgresql.org/docs/16/functions-admin.html
+
+[4] MongoDB. *Replication.* https://www.mongodb.com/docs/manual/replication/
+
+[5] MongoDB. *Write Concern.* https://www.mongodb.com/docs/manual/reference/write-concern/
+
+[6] MongoDB. *Read Preference.* https://www.mongodb.com/docs/manual/core/read-preference/
+
+[7] MongoDB. *Sharding.* https://www.mongodb.com/docs/manual/sharding/
+
+[8] Brewer, E. (2012). CAP twelve years later: How the "rules" have changed. *IEEE Computer*, 45(2), 23-29.

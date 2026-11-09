@@ -45,7 +45,7 @@ patient (one document)
 
 | Data | Choice | Reason |
 |---|---|---|
-| Visits inside a patient | **Embedded** | A clinician reads a patient's history as one unit, so one read returns everything |
+| Visits inside a patient | **Embedded** | A clinician reads a patient's history as one unit, so one read returns everything [1] |
 | Diagnoses, prescriptions, lab orders, payments inside a visit | **Embedded** | They only make sense as part of that visit and are always read with it |
 | Doctor inside a visit | **Embedded copy** (id, name, branch, city) | The visit shows who treated the patient without another lookup. The cost is duplication, see section 7 |
 | Drug stock and prices | **Not in these documents** | Stock changes constantly and needs the safe concurrent updates shown in Portfolio 3, so it stays in PostgreSQL |
@@ -60,7 +60,7 @@ All output is in `Akanji_Shakirat_301928526_P4_NosqlOutput.txt`.
 
 **Query 2: a whole record in one read.** `findOne({_id: 100})` returned Sade Agu with 30 visits. The first visit came back with its doctor (Dr Blessing Okafor, CareBridge Oyo Town), diagnosis (Anaemia, D64.9), prescription (Amlodipine) and payment (12,000, insurance) all inside it. In SQL, the same view needs joins across appointments, visits, doctors, branches, diagnoses, prescriptions and payments.
 
-**Query 3: everything one patient was prescribed.** An aggregation with `$match`, two `$unwind` stages, `$sort` and `$limit` returned the five most recent prescriptions for patient 100 (for example Fluconazole and Atorvastatin on 2026-01-20). This is the same question as Query 4 in Portfolio 2, which needed a four-table join in SQL. In MongoDB no join is needed, because the data already sits together.
+**Query 3: everything one patient was prescribed.** An aggregation [2] with `$match`, two `$unwind` stages, `$sort` and `$limit` returned the five most recent prescriptions for patient 100 (for example Fluconazole and Atorvastatin on 2026-01-20). This is the same question as Query 4 in Portfolio 2, which needed a four-table join in SQL. In MongoDB no join is needed, because the data already sits together.
 
 **Query 4: most common diagnoses.** Type 2 diabetes (990), Upper respiratory infection (962), Anaemia (956), Asthma (952), Urinary tract infection (951). Counting across all patients means unwinding every visit's array, which is more work than a simple `GROUP BY` in SQL.
 
@@ -75,9 +75,9 @@ All output is in `Akanji_Shakirat_301928526_P4_NosqlOutput.txt`.
 | Without index | `COLLSCAN` | 200 | 1 |
 | With index on `visits.visit_id` | `FETCH > IXSCAN` | 1 | 1 |
 
-This is the same idea as Portfolio 2: a collection scan reads everything, an index scan jumps to the match. Time showed 0 ms in both cases because only 200 documents are stored, so the difference in documents examined is the real evidence, not the milliseconds. MongoDB indexes array fields (a multikey index), so one index covers the visit ids inside every patient's `visits` array.
+This is the same idea as Portfolio 2: a collection scan reads everything, an index scan jumps to the match. An index on a field inside an array, such as `visits.visit_id`, is a multikey index [3]. Time showed 0 ms in both cases because only 200 documents are stored, so the difference in documents examined is the real evidence, not the milliseconds. MongoDB indexes array fields (a multikey index), so one index covers the visit ids inside every patient's `visits` array.
 
-**Query 8: document growth.** The biggest document is patient 1 with 549 visits, at 286,923 bytes (about 0.29 MB). MongoDB's limit is 16 MB per document, so this one is under 2% of the limit. The visit counts in my data are artificially skewed, but the point is real: an embedded array that grows forever eventually becomes a problem.
+**Query 8: document growth.** The biggest document is patient 1 with 549 visits, at 286,923 bytes (about 0.29 MB). MongoDB's limit is 16 MB per document [4], so this one is under 2% of the limit. The visit counts in my data are artificially skewed, but the point is real: an embedded array that grows forever eventually becomes a problem.
 
 ## 6. Evidence
 
@@ -109,7 +109,7 @@ These screenshots are from my own terminal, taken while I ran the demo. The full
 **Weak fit:**
 - **Duplicated data.** The doctor's name is copied into every visit. If a doctor's name changes, many documents must be updated, which is easy to get wrong. In PostgreSQL the name lives in one row.
 - **Cross-patient questions are harder.** Query 4 and Query 5 need `$unwind` and nested expressions. Reporting is more natural in SQL.
-- **Unbounded growth.** Visits keep being added to the same document (Query 8). A very long-lived patient could eventually approach the 16 MB limit, so a real system might move older visits into a separate collection.
+- **Unbounded growth.** Visits keep being added to the same document (Query 8). A very long-lived patient could eventually approach the 16 MB limit [4], so a real system might move older visits into a separate collection.
 - **Weaker guarantees.** There are no foreign keys, so nothing stops a visit from referencing a doctor that does not exist. Money and stock, which Portfolio 3 showed need strict transactions and constraints, belong in the relational database.
 - **A snapshot.** The MongoDB documents are copied from PostgreSQL and are not kept in sync. A real system would need a pipeline to keep both updated.
 
@@ -140,7 +140,10 @@ I chose the document type for the implementation because patient records are the
 
 ## 11. References
 
-- MongoDB Manual, *Data Modeling* (embedded vs referenced documents): https://www.mongodb.com/docs/manual/data-modeling/
-- MongoDB Manual, *Aggregation pipeline* (`$unwind`, `$group`, `$project`): https://www.mongodb.com/docs/manual/core/aggregation-pipeline/
-- MongoDB Manual, *Multikey indexes*: https://www.mongodb.com/docs/manual/core/indexes/index-types/index-multikey/
-- MongoDB Manual, *Limits and thresholds* (16 MB document size): https://www.mongodb.com/docs/manual/reference/limits/
+[1] MongoDB. *Data Modeling* (embedded and referenced documents). https://www.mongodb.com/docs/manual/data-modeling/
+
+[2] MongoDB. *Aggregation Pipeline* (`$unwind`, `$group`, `$project`). https://www.mongodb.com/docs/manual/core/aggregation-pipeline/
+
+[3] MongoDB. *Multikey Indexes.* https://www.mongodb.com/docs/manual/core/indexes/index-types/index-multikey/
+
+[4] MongoDB. *Limits and Thresholds* (16 MB document size). https://www.mongodb.com/docs/manual/reference/limits/
