@@ -6,7 +6,7 @@
 
 cd "$(dirname "$0")"
 
-COMPOSE=${COMPOSE:-"docker compose -f docker-compose.replication.yml --env-file ../.env"}
+COMPOSE=${COMPOSE:-"docker compose -f Akanji_Shakirat_301928526_P5_DockerComposeReplication.yml --env-file ../.env"}
 P=${P:-"docker exec -i carebridge-pg-primary psql -U carebridge -d carebridge"}
 R=${R:-"docker exec -i carebridge-pg-replica psql -U carebridge -d carebridge"}
 STOP_PRIMARY=${STOP_PRIMARY:-"docker stop carebridge-pg-primary"}

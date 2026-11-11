@@ -31,7 +31,7 @@ Every file is named `Akanji_Shakirat_301928526_<Portfolio>_<Name>.<ext>`: last n
 
 - `Akanji_Shakirat_301928526_README.md`: this file, the overview and how to navigate.
 - `Akanji_Shakirat_301928526_FinalSummary.md`: the 2 to 3 page summary of all five portfolios, with the reflection, AI-use declaration and references.
-- `docker-compose.yml`: starts PostgreSQL 16 and MongoDB 7 for Portfolios 1 to 4.
+- `Akanji_Shakirat_301928526_DockerCompose.yml`: starts PostgreSQL 16 and MongoDB 7 for Portfolios 1 to 4.
 
 **Portfolio folders**
 
@@ -47,16 +47,16 @@ Each folder contains its own README (`Akanji_Shakirat_301928526_P<n>_README.md`)
 
 ```text
 .
-├── .gitignore                                  # keeps .env and .DS_Store out of Git
-├── Akanji_Shakirat_301928526_FinalSummary.md   # 2 to 3 page summary of all five portfolios
-├── Akanji_Shakirat_301928526_README.md         # this file: overview and how to navigate
-├── Akanji_Shakirat_301928526_README.txt        # plain-text copy of this file
-├── docker-compose.yml                          # PostgreSQL 16 and MongoDB 7 (Portfolios 1 to 4)
-├── portfolio-1-database-design/                # ER design, schema, sample data, constraint tests, normalisation
-├── portfolio-2-query-optimisation/             # data generator, queries, plans before and after indexing
-├── portfolio-3-transactions-concurrency/       # rollback, lost update, isolation levels, double booking
-├── portfolio-4-nosql/                          # MongoDB document model, export, eight queries
-└── portfolio-5-distributed-cloud/              # replication and failover, Atlas replica set, sharding
+├── .gitignore                                    # keeps .env and .DS_Store out of Git
+├── Akanji_Shakirat_301928526_DockerCompose.yml   # PostgreSQL 16 and MongoDB 7 (Portfolios 1 to 4)
+├── Akanji_Shakirat_301928526_FinalSummary.md     # 2 to 3 page summary of all five portfolios
+├── Akanji_Shakirat_301928526_README.md           # this file: overview and how to navigate
+├── Akanji_Shakirat_301928526_README.txt          # plain-text copy of this file
+├── portfolio-1-database-design/                  # ER design, schema, sample data, constraint tests, normalisation
+├── portfolio-2-query-optimisation/               # data generator, queries, plans before and after indexing
+├── portfolio-3-transactions-concurrency/         # rollback, lost update, isolation levels, double booking
+├── portfolio-4-nosql/                            # MongoDB document model, export, eight queries
+└── portfolio-5-distributed-cloud/                # replication and failover, Atlas replica set, sharding
 ```
 
 Each portfolio folder is described in its own README (`Akanji_Shakirat_301928526_P<n>_README.md`), which lists every file in the folder.
@@ -83,8 +83,10 @@ Requirements: Docker Desktop and Git.
 git clone https://github.com/Anikhe00/Akanji-Shakirat-301928526.git
 cd Akanji-Shakirat-301928526
 echo "PG_PASSWORD=choose-a-password" > .env
-docker compose up -d
+docker compose -f Akanji_Shakirat_301928526_DockerCompose.yml up -d
 ```
+
+The compose file follows the repository naming convention, so Docker needs the `-f` option to find it. Run every `docker compose` command from the repository root.
 
 Then follow the "How to run" section in each portfolio's README. Portfolio 5's Atlas demo needs your own free Atlas cluster. Its script asks for the connection string and hides it, so the password is never saved.
 

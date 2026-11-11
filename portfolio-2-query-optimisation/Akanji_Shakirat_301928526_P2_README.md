@@ -6,7 +6,7 @@ This portfolio shows how PostgreSQL executes queries on the CareBridge Clinics d
 
 ## 2. Environment
 
-PostgreSQL 16 running in Docker (`docker-compose.yml` in the repository root) on a MacBook Pro with an M1 chip. Timings come from this one machine, so the absolute numbers will differ elsewhere. The comparison between before and after is what matters.
+PostgreSQL 16 running in Docker (`Akanji_Shakirat_301928526_DockerCompose.yml` in the repository root) on a MacBook Pro with an M1 chip. Timings come from this one machine, so the absolute numbers will differ elsewhere. The comparison between before and after is what matters.
 
 ## 3. Files in this folder
 
@@ -125,7 +125,7 @@ The image below is *rendered from the saved output file* `Akanji_Shakirat_301928
 
 Start the databases and load the data:
 
-    docker compose up -d
+    docker compose -f Akanji_Shakirat_301928526_DockerCompose.yml up -d
     docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-1-database-design/Akanji_Shakirat_301928526_P1_Schema.sql
     docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-2-query-optimisation/Akanji_Shakirat_301928526_P2_SeedBulk.sql
 
