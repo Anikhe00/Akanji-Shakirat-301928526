@@ -85,7 +85,7 @@ Money is stored as `NUMERIC(10,2)` or `NUMERIC(12,2)`, never as a floating-point
 2. **`prescriptions` is a junction table.** A visit can have several prescriptions and a drug appears in many prescriptions, so a table sits between them.
 3. **Patient and doctor are not repeated in `prescriptions`.** They can be reached through the chain `prescriptions -> visits -> appointments -> patients / doctors`. Storing them again would duplicate facts.
 4. **Deletes are restricted, not cascading.** See section 7.
-5. **PostgreSQL 16 in Docker.** The database runs from `docker-compose.yml` in the repository root.
+5. **PostgreSQL 16 in Docker.** The database runs from `Akanji_Shakirat_301928526_DockerCompose.yml` in the repository root.
 
 ## 6. Normalisation
 
@@ -121,7 +121,7 @@ I also ran a join across `prescriptions`, `visits`, `appointments`, `patients`, 
 
 From the repository root, start the databases:
 
-    docker compose up -d
+    docker compose -f Akanji_Shakirat_301928526_DockerCompose.yml up -d
 
 Create the tables:
 

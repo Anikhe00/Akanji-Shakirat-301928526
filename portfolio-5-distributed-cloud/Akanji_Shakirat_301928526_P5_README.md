@@ -18,7 +18,7 @@ Sharding is covered as a written design discussion (section 6).
 
 | File | Purpose |
 |---|---|
-| `docker-compose.replication.yml` | Starts a PostgreSQL primary and a replica (separate from the main `docker-compose.yml`) |
+| `Akanji_Shakirat_301928526_P5_DockerComposeReplication.yml` | Starts a PostgreSQL primary and a replica (separate from the main `Akanji_Shakirat_301928526_DockerCompose.yml`) |
 | `Akanji_Shakirat_301928526_P5_InitPrimary.sql` | Runs once on the primary: creates the replication user and allows it to connect |
 | `Akanji_Shakirat_301928526_P5_ReplicationDemo.sh` | Runs the five replication demos |
 | `Akanji_Shakirat_301928526_P5_ReplicationOutput.txt` | Captured output of the replication demo |

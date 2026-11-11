@@ -21,7 +21,7 @@ In Portfolio 1 the CareBridge data was split across 11 tables. To read one patie
 ## 3. How to run
 
 ```bash
-docker compose up -d
+docker compose -f Akanji_Shakirat_301928526_DockerCompose.yml up -d
 bash portfolio-4-nosql/Akanji_Shakirat_301928526_P4_RunNosqlDemo.sh 2>&1 | tee portfolio-4-nosql/Akanji_Shakirat_301928526_P4_NosqlOutput.txt
 ```
 

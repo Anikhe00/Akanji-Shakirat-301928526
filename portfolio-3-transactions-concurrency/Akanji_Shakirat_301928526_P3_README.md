@@ -33,7 +33,7 @@ All demos use one test drug, **Demo Artesunate** (stock 10), created by `Akanji_
 ## 3. How to run
 
 ```bash
-docker compose up -d
+docker compose -f Akanji_Shakirat_301928526_DockerCompose.yml up -d
 docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_SetupDemo.sql
 docker exec -i carebridge-pg psql -U carebridge -d carebridge < portfolio-3-transactions-concurrency/Akanji_Shakirat_301928526_P3_Demo1Atomicity.sql
 ```

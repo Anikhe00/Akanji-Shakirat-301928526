@@ -1,5 +1,5 @@
 # Portfolio 5: a PostgreSQL primary and a streaming replica.
-# Separate from the main docker-compose.yml, so it never touches your Portfolio 1 to 4 database.
+# Separate from the main Akanji_Shakirat_301928526_DockerCompose.yml, so it never touches your Portfolio 1 to 4 database.
 services:
   pg-primary:
     image: postgres:16
