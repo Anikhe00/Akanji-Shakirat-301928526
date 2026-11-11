@@ -50,6 +50,7 @@ Each folder contains its own README (`Akanji_Shakirat_301928526_P<n>_README.md`)
 ├── .gitignore                                  # keeps .env and .DS_Store out of Git
 ├── Akanji_Shakirat_301928526_FinalSummary.md   # 2 to 3 page summary of all five portfolios
 ├── Akanji_Shakirat_301928526_README.md         # this file: overview and how to navigate
+├── Akanji_Shakirat_301928526_README.txt        # plain-text copy of this file
 ├── docker-compose.yml                          # PostgreSQL 16 and MongoDB 7 (Portfolios 1 to 4)
 ├── portfolio-1-database-design/                # ER design, schema, sample data, constraint tests, normalisation
 ├── portfolio-2-query-optimisation/             # data generator, queries, plans before and after indexing
